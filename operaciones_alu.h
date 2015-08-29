@@ -1,6 +1,6 @@
-long ADD(long *resultado,long op1,long op2);
-long AND(long *resultado,long op1,long op2);
-long EOR(long *resultado,long op1,long op2);
-long MOV(long op1,long op2);
-long ORR(long *resultado,long op1,long op2);
-long SUB(long *resultado,long op1,long op2);
+ADD(unsigned long *resultado,unsigned long op1,unsigned long op2,unsigned long *bandera);
+ AND(unsigned long *resultado,unsigned long op1,unsigned long op2,unsigned long *bandera);
+ EOR(unsigned long *resultado,unsigned long op1,unsigned long op2,unsigned long *bandera);
+ MOV(unsigned long *op1,unsigned long op2);
+ ORR(unsigned long *resultado,unsigned long op1,unsigned long op2,unsigned long *bandera);
+SUB(unsigned long *resultado,unsigned long op1,unsigned long op2,unsigned long *bandera);
