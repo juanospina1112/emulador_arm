@@ -5,4 +5,6 @@ unsigned long ASR(unsigned long Variable_salida,unsigned long Variable_entrada,u
 unsigned long BIC(unsigned long Variable_salida,unsigned long Variable_entrada);
 unsigned long MVN(unsigned long Variable_salida,unsigned long Variable_entrada);
 unsigned long RSBS(unsigned long Variable_salida,unsigned long Variable_entrada,unsigned long constate_parametro);
+unsigned long REV(unsigned long Variable_salida,unsigned long Variable_entrada);
+unsigned long REV16(unsigned long Variable_salida,unsigned long Variable_entrada);
 //NOP(long a,long b);
