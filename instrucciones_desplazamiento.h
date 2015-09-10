@@ -1,4 +1,4 @@
-/**
+﻿/**
 * \brief Función de desplazamiento a la izquierda
 * \param unsigned Variable_salida
 * \param unsigned Variable_entrada
@@ -67,3 +67,4 @@ unsigned long REV(unsigned long Variable_salida,unsigned long Variable_entrada);
 */
 unsigned long REV16(unsigned long Variable_salida,unsigned long Variable_entrada);
 //NOP(long a,long b);
+unsigned long REVSH(unsigned long variable_entrada);
