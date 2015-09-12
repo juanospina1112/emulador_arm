@@ -39,7 +39,7 @@ unsigned long ADD(unsigned long op1,unsigned long op2,unsigned long *bandera)
        }
        else
        {
-           *bandera=6;
+           *bandera=4;
        }
     }
 
@@ -66,9 +66,25 @@ unsigned long ADD(unsigned long op1,unsigned long op2,unsigned long *bandera)
        {
            *bandera=13;
        }
-       else
+        else if(*bandera==4)
        {
            *bandera=12;
+       }
+        else if(*bandera==3)
+       {
+           *bandera=11;
+       }
+        else if(*bandera==2)
+       {
+           *bandera=10;
+       }
+        else if(*bandera==1)
+       {
+           *bandera=19;
+       }
+       else
+       {
+           *bandera=8;
        }
 
     }
@@ -95,8 +111,7 @@ unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long *bandera)
            *bandera=2;
        }
     }
-
-    if((op1>=pow(2,31))&&(op2>=pow(2,31)))// bandera de carry
+   if((op1>=pow(2,31))&&(op2>=pow(2,31)))// bandera de carry
     {
         if(*bandera==3)
        {
@@ -112,7 +127,7 @@ unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long *bandera)
        }
        else
        {
-           *bandera=6;
+           *bandera=4;
        }
     }
 
@@ -139,12 +154,29 @@ unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long *bandera)
        {
            *bandera=13;
        }
-       else
+        else if(*bandera==4)
        {
            *bandera=12;
        }
+        else if(*bandera==3)
+       {
+           *bandera=11;
+       }
+        else if(*bandera==2)
+       {
+           *bandera=10;
+       }
+        else if(*bandera==1)
+       {
+           *bandera=19;
+       }
+       else
+       {
+           *bandera=8;
+       }
 
     }
+
 
     if((*bandera==15)||(*bandera==14)||(*bandera==13)||(*bandera==12))
     {
@@ -193,9 +225,9 @@ return resultado;
        }
     }
 
-    if((op1>=pow(2,31))&&(op2>=pow(2,31)))// bandera de carry
+      if((op1>=pow(2,31))&&(op2>=pow(2,31)))// bandera de carry
     {
-          if(*bandera==3)
+        if(*bandera==3)
        {
            *bandera=7;
        }
@@ -209,7 +241,7 @@ return resultado;
        }
        else
        {
-           *bandera=6;
+           *bandera=4;
        }
     }
 
@@ -236,16 +268,115 @@ return resultado;
        {
            *bandera=13;
        }
-       else
+        else if(*bandera==4)
        {
            *bandera=12;
        }
+        else if(*bandera==3)
+       {
+           *bandera=11;
+       }
+        else if(*bandera==2)
+       {
+           *bandera=10;
+       }
+        else if(*bandera==1)
+       {
+           *bandera=19;
+       }
+       else
+       {
+           *bandera=8;
+       }
+
     }
     return resultado;
 }
-MOV(unsigned long *op1,unsigned long op2)
+unsigned MOV(unsigned long op1,unsigned long op2,unsigned long *bandera)
 {
     op1=op2;
+         if((1<<31)&op1) //bandera negativo
+    {
+       *bandera=1;
+    }
+     if(op1==0) // bandera cero
+    {
+       if(*bandera==1)
+       {
+           *bandera=3;
+       }
+       else
+       {
+           *bandera=2;
+       }
+    }
+
+    if((op1>=pow(2,31))&&(op2>=pow(2,31)))// bandera de carry
+    {
+        if(*bandera==3)
+       {
+           *bandera=7;
+       }
+       else if(*bandera==1)
+       {
+           *bandera=5;
+       }
+       else if(*bandera==2)
+       {
+           *bandera=6;
+       }
+       else
+       {
+           *bandera=4;
+       }
+    }
+
+
+     if(((1<<31)&op1)&&((1<<31)&op2)&&((1<<31)&op1)) //bandera sobre flujo
+    {
+
+    }
+     else if(((1<<31)|op1)||((1<<31)|op2)||((1<<31)|op1))
+    {
+
+    }
+    else
+    {
+        if(*bandera==7)
+       {
+           *bandera=15;
+       }
+       else if(*bandera==6)
+       {
+           *bandera=14;
+       }
+       else if(*bandera==5)
+       {
+           *bandera=13;
+       }
+        else if(*bandera==4)
+       {
+           *bandera=12;
+       }
+        else if(*bandera==3)
+       {
+           *bandera=11;
+       }
+        else if(*bandera==2)
+       {
+           *bandera=10;
+       }
+        else if(*bandera==1)
+       {
+           *bandera=19;
+       }
+       else
+       {
+           *bandera=8;
+       }
+
+    }
+    return op1;
 
 }
 unsigned long ORR(unsigned long op1,unsigned long op2,unsigned long *bandera)
@@ -289,7 +420,7 @@ unsigned long SUB(unsigned long op1,unsigned long op2,unsigned long *bandera)
 
     if((op1>=pow(2,31))&&(op2>=pow(2,31)))// bandera de carry
     {
-          if(*bandera==3)
+        if(*bandera==3)
        {
            *bandera=7;
        }
@@ -303,7 +434,7 @@ unsigned long SUB(unsigned long op1,unsigned long op2,unsigned long *bandera)
        }
        else
        {
-           *bandera=6;
+           *bandera=4;
        }
     }
 
@@ -330,10 +461,27 @@ unsigned long SUB(unsigned long op1,unsigned long op2,unsigned long *bandera)
        {
            *bandera=13;
        }
-       else
+        else if(*bandera==4)
        {
            *bandera=12;
        }
+        else if(*bandera==3)
+       {
+           *bandera=11;
+       }
+        else if(*bandera==2)
+       {
+           *bandera=10;
+       }
+        else if(*bandera==1)
+       {
+           *bandera=19;
+       }
+       else
+       {
+           *bandera=8;
+       }
+
     }
 
 return resultado;

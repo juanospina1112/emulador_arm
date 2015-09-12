@@ -31,7 +31,7 @@ unsigned long  EOR(unsigned long op1,unsigned long op2,unsigned long *bandera);
 * \param unsigned long op2
 * \return Función declarada tipo void, dado que el resultado es de tipo puntero
 */
-void MOV(unsigned long *op1,unsigned long op2);
+unsigned MOV(unsigned long op1,unsigned long op2,unsigned long *bandera);
 /**
 * \brief Función encargada de ralizar una OR lógica
 * \param unsigned long *resultado
