@@ -1,53 +1,56 @@
 /**
 * \brief Función encargada sumar
-* \param unsigned long *resultado
 * \param unsigned long op1
 * \param unsigned long op2
 * \param unsigned long *bandera
-* \return Función declarada tipo void, dado que el resultado es de tipo puntero
+* \return Un dato tipo long sin signo con el resultado de la operación
 */
-unsigned long ADD(unsigned long op1,unsigned long op2,unsigned long *bandera);// todas tienen retorno y se quita el puntero resultado
+unsigned long ADD(unsigned long op1,unsigned long op2,unsigned long *bandera);
 /**
 * \brief Función encargada de ralizar una multiplicación lógica
-* \param unsigned long *resultado
 * \param unsigned long op1
 * \param unsigned long op2
 * \param unsigned long *bandera
-* \return Función declarada tipo void, dado que el resultado es de tipo puntero
+* \return Un dato tipo long sin signo con el resultado de la operación
 */
 unsigned long  AND(unsigned long op1,unsigned long op2,unsigned long *bandera);
 /**
 * \brief Función encargada de ralizar una EX-OR lógica
-* \param unsigned long *resultado
 * \param unsigned long op1
 * \param unsigned long op2
 * \param unsigned long *bandera
-* \return Función declarada tipo void, dado que el resultado es de tipo puntero
+* \return Un dato tipo long sin signo con el resultado de la operación
 */
 unsigned long  EOR(unsigned long op1,unsigned long op2,unsigned long *bandera);
 /**
 * \brief Función encargada copiar un dato en una variable diferente
 * \param unsigned long op1
 * \param unsigned long op2
-* \return Función declarada tipo void, dado que el resultado es de tipo puntero
+* \param unsigned long *bandera
+* \return Un dato tipo long sin signo con el resultado de la operación
 */
 unsigned MOV(unsigned long op1,unsigned long op2,unsigned long *bandera);
 /**
 * \brief Función encargada de ralizar una OR lógica
-* \param unsigned long *resultado
 * \param unsigned long op1
 * \param unsigned long op2
 * \param unsigned long *bandera
-* \return Función declarada tipo void, dado que el resultado es de tipo puntero
+* \return Un dato tipo long sin signo con el resultado de la operación
 */
 unsigned long ORR(unsigned long op1,unsigned long op2,unsigned long *bandera);
 /**
 * \brief Función encargada restar
-* \param unsigned long *resultado
 * \param unsigned long op1
 * \param unsigned long op2
 * \param unsigned long *bandera
-* \return Función declarada tipo void, dado que el resultado es de tipo puntero
+* \return Un dato tipo long sin signo con el resultado de la operación
 */
 unsigned long SUB(unsigned long op1,unsigned long op2,unsigned long *bandera);
+/**
+* \brief Función encargada de sumar teniendo en cuenta el carry
+* \param unsigned long op1
+* \param unsigned long op2
+* \param unsigned long *bandera
+* \return Un dato tipo long sin signo con el resultado de la operación
+*/
 unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long *bandera);

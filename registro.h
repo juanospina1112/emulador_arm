@@ -1,4 +1,3 @@
-
 /**
 * \brief Función para mostrar los datos almacenados en los registros
 * \param unsigned long r[13]

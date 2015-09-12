@@ -5,7 +5,7 @@
 #include <curses.h>
 int main()
 {
-    unsigned long r[13];
+    unsigned long r[13], PC;
 
     while(1)
   {
@@ -14,7 +14,8 @@ int main()
 
     r[12]=0;
     r[2]=-21;
-
+	PC=0; 
+    BNE(&PC,r[2],r[12]);
 int c,i;
     r[10]=ADC(r[2],-2,&r[12]);
 
