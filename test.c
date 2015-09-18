@@ -3,52 +3,70 @@
 #include "registro.h"
 #include "operaciones_alu.h"
 #include <curses.h>
+#include "decoder.h"
+
 int main()
 {
-    unsigned long r[13], PC;
+    unsigned long r[13];
+    r[12]=0 ;// registro reservado para las banderas
+int c,PC=0,pas_dire,k=0;
+int i, num_instructions;
+		ins_t read;
+		char** instructions;
+		instruction_t instruction;
+		   /************ lee el programa a ejecutar *****/
+//------- No modificar ------//
+
+		num_instructions = readFile("code.txt", &read);
+		if(num_instructions==-1)
+			return 0;
+
+		if(read.array==NULL)
+			return 0;
+
+		instructions = read.array; /* Arreglo con las instrucciones */
+
+
+	//---------------------------//
 
     while(1)
   {
 
 
 
-    r[12]=0;
-    r[2]=-21;
-	PC=0; 
-    BNE(&PC,r[2],r[12]);
-int c,i;
-    r[10]=ADC(r[2],-2,&r[12]);
 
+
+/********************************** interfaz *************************************************************/
 
 
     initscr();		/* Inicia modo curses */
 	curs_set(0);	/* Cursor Invisible */
-	//raw();			/* Activa modo raw */
-	keypad(stdscr, TRUE);	/* Obtener F1, F2, etc */
+
 	noecho();		/* No imprimir los caracteres leidos */
 
 	start_color();	/* Permite manejar colores */
 
 	init_pair(1, COLOR_GREEN, COLOR_WHITE);	/* Pair 1 -> Texto verde
-											   fondo Negro */
- bkgd(COLOR_PAIR(1));
+											   fondo blanco */
+ bkgd(COLOR_PAIR(1)); //se activa el color de fondo y de las letras
  mostrar_registros(r);
-mostrar(r[10]);
-    refresh();
+
+    refresh();// refresca pantalla
 
 
 	border( ACS_VLINE, ACS_VLINE,
 			ACS_HLINE, ACS_HLINE,
 			ACS_ULCORNER, ACS_URCORNER,
 			ACS_LLCORNER, ACS_LRCORNER	);
+			// primero dos for hacen el recuedro de los registros
 			c=95;//caracter ascci horizontal
    for(i=1;i<=20;i++)
    {
       //linea horizontal superior
-      move(6,i);  //Aqui estamos moviendo el cursor para a linea 1 columna i.
+      move(6,i);  //Aqui estamos moviendo el cursor para a linea 6 columna i.
       printw("%c",c);  //Imprimimos un texto en la posición establecida.
       //linea horizontal inferior
-      move(28,i);  //Aqui estamos moviendo el cursor para a linea 40 columna i.
+      move(28,i);  //Aqui estamos moviendo el cursor para a linea 28 columna i.
       printw("%c",c);  //Imprimimos un  texto en la posición establecida.
    }
    c=124 ; //caracter ascci vertical
@@ -61,14 +79,16 @@ mostrar(r[10]);
       move(i,20);
       printw("%c",c);
    }
+   // recuadro donde se imprime los resultados
+
 c=95;//caracter ascci horizontal
    for(i=30;i<=50;i++)
    {
       //linea horizontal superior
-      move(6,i);  //Aqui estamos moviendo el cursor para a linea 1 columna i.
+      move(6,i);  //Aqui estamos moviendo el cursor para a linea 6 columna i.
       printw("%c",c);  //Imprimimos un texto en la posición establecida.
       //linea horizontal inferior
-      move(9,i);  //Aqui estamos moviendo el cursor para a linea 40 columna i.
+      move(9,i);  //Aqui estamos moviendo el cursor para a linea 9 columna i.
       printw("%c",c);  //Imprimimos un  texto en la posición establecida.
    }
    c=124 ; //caracter ascci vertical
@@ -81,230 +101,272 @@ c=95;//caracter ascci horizontal
       move(i,50);
       printw("%c",c);
    }
-	move(12,30);	/* Mueve el cursor a la posición y=2, x=34*/
+ /************* para imprimir las banderas ***/
+
+	move(12,30);	/* Mueve el cursor a la posición y=12, x=30*/
+	         
 	printw("banderas.");
 	if(r[12]==15)
     {
-       move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+       move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=1");
     }
     else if(r[12]==14)
     {
-           move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+           move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=1");
 
     }
     else if(r[12]==13)
     {
-           move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+           move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
-	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
+    printw("C=1");
+	move(16,28);
 	printw("V=1");
 
     }
     else if(r[12]==12)
     {
-           move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+           move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=1");
 
     }
     else if(r[12]==11)
-    {   move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+    {   move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=1");
 
     }
     else if(r[12]==10)
     {
-           move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+           move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=1");
 
     }
     else if(r[12]==9)
     {
-           move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+           move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=1");
 
     }
     else if(r[12]==8)
     {
-            move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+            move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=1");
 
     }
 
     else if(r[12]==7)
     {
-            move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+            move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
     else if(r[12]==6)
     {
-          move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+          move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
     else if(r[12]==5)
     {
-          move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+          move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
     else if(r[12]==4)
     {
-          move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+          move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=1");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
     else if(r[12]==3)
     {
-          move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+          move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
     else if(r[12]==2)
     {
-          move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+          move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=1");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
     else if(r[12]==1)
     {
-          move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+          move(14,28);
 	printw("N=1");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
     else
     {
-          move(14,28);	/* Mueve el cursor a la posición y=2, x=34*/
+          move(14,28);
 	printw("N=0");
-	move(16,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,40);
 	printw("Z=0");
-	move(14,40);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(14,40);
 	printw("C=0");
-	move(16,28);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(16,28);
 	printw("V=0");
 
     }
-	move(1, 30);	/* Mueve el cursor a la posición y=2, x=34*/
+    /***** titulos ***/
+	move(1, 30);
 	printw("EMULADOR ARM CORTEX M0");
-	move(5, 34);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(5, 34);
 	printw("resultado");
-	move(5, 5);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(5, 5);
 	printw("valor registros");
-	move(8, 60);	/* Mueve el cursor a la posición y=2, x=34*/
+	move(8, 60);
 	printw("linea de codigo en ejecucion");
+	move(10, 60);
+	printw("%s",instructions[PC]);
+	move(34, 3);
+	printw("s:: salir");
+	move(34, 15);
+	printw("r::reset");
+	move(34, 25);
+	printw("p::paso a paso");
+	move(34, 42);
+	printw("d::directo");
+	move(14,60);
+	printw("PC=%d",PC);
+
 	refresh();	/* Imprime en la pantalla
 					Sin esto el printw no es mostrado */
-
-
-
-
-
-	salir();
-
-
-
-    }
+if(k==0){
+pas_dire=getch(); // forma de saber si se corre el programa paso a paso o no
+k=1;
 }
 
-void salir()
-{
+
+// forma para que el usuario termine el programa
+
+if(pas_dire!='D'){
+ c=getch();}
+ if(PC==num_instructions)
+ {
+     c='s';
+ }
+ if(c=='s')
+ {
 
 
-    if(	getch()=='1')
-    {
+        for(i=0; i<num_instructions; i++){
+		free(read.array[i]);
+        }
+	free(read.array);
         endwin();	/* Finaliza el modo curses */
-        exit(1);
+        exit(0);
+ }
+ else if(c=='r')
+ {
+     main();
+ }
 
+
+
+
+
+
+
+					/******************** decodificacion y ejecucion *************************/
+
+
+
+
+	instruction = getInstruction(instructions[PC]); // Instrucción en la posición del PC
+	decodeInstruction(instruction,&r,&r[12],&PC); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
+
+
+PC=PC+2;// aumenta el pc
     }
-
 }
+
