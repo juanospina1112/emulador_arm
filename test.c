@@ -311,7 +311,7 @@ int main()
 	move(14,60);
 	printw("PC=%d",2*PC);
 	move(16,60);
-	printw("LR=%d",LR);
+	printw("LR=%d",2*LR);
 
 
 	refresh();	/* Imprime en la pantalla
@@ -356,7 +356,7 @@ int main()
 			move(i,k);
 			printw(" ");
 		}
-	}		
+	}
 
 	instruction = getInstruction(instructions[PC]); // Instrucción en la posición del PC
 	decodeInstruction(instruction,&r,&r[12],&PC,&LR); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros

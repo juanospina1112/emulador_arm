@@ -1,6 +1,10 @@
+#ifndef _DECODER_H_
+#define	_DECODER_H_
+
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-
 /**
 * \struct ins_t;
 * \brief arreglo para almacenar el archivo a ejecutar
@@ -47,4 +51,5 @@ int readFile(char* filename, ins_t* instructions);
 * \return Entero con la cantidad de líneas del archivo.
 */
 int countLines(FILE* fp);
+
 #endif /*_DECODER_H_*/

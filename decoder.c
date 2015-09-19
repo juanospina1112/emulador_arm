@@ -6,11 +6,12 @@
 #include <curses.h>
 #include "decoder.h"
 #include "branch.h"
+#include "instrucciones_desplazamiento.h"
 
 void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned long *bandera,unsigned long *PC,unsigned long*LR)
 {
     int c;
-	//            codificacion funciones de la alu             
+	//            codificacion funciones de la alu
 	if(strcmp(instruction.mnemonic,"ADDS") == 0)
 	{
 		if(instruction.op1_type=='R')
@@ -339,7 +340,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
             SUB(instruction.op1_value,instruction.op2_value,&bandera);
         }
     }
-    //                 decodificacion funciones branch 
+    //                 decodificacion funciones branch
 	if(strcmp(instruction.mnemonic,"B")==0)
 	{
 		if(instruction.op1_type=='#')
@@ -633,10 +634,10 @@ instruction_t getInstruction(char* instStr)
 	char* split = (char*)malloc(strlen(instStr)+1);
 	int num=0;
 	strcpy(split, instStr);
-	// Obtiene el mnemonico de la instrucción 
+	// Obtiene el mnemonico de la instrucción
 	split = strtok(split, " ,");
 	strcpy(instruction.mnemonic, split);
-	// Separa los operandos 
+	// Separa los operandos
 	while (split != NULL)
 	{
 		switch(num)
@@ -667,15 +668,15 @@ instruction_t getInstruction(char* instStr)
 }
 int readFile(char* filename, ins_t* instructions)
 {
-	FILE* fp;	// Puntero a un archivo  
-	int lines;	// Cantidad de líneas del archivo 
-	int line=0;	// Línea leida 
-	char buffer[50]; // Almacena la cadena leida 
-	fp = fopen(filename, "r");	// Abrir el archivo como solo lectura 
+	FILE* fp;	// Puntero a un archivo
+	int lines;	// Cantidad de líneas del archivo
+	int line=0;	// Línea leida
+	char buffer[50]; // Almacena la cadena leida
+	fp = fopen(filename, "r");	// Abrir el archivo como solo lectura
 	if( fp==NULL )
-		return -1;	// Error al abrir el archivo 
+		return -1;	// Error al abrir el archivo
 	lines = countLines(fp);	// Cantidad de líneas
-	// Asignación dinámica de memoria para cada instrucción 
+	// Asignación dinámica de memoria para cada instrucción
 	instructions->array = (char**)malloc(lines*sizeof(char*));
 	while ( fgets(buffer, 50, fp) != NULL && line<lines )
 	{
@@ -683,7 +684,7 @@ int readFile(char* filename, ins_t* instructions)
 		strcpy(instructions->array[line], buffer);
 		line++;
  	}
-	fclose(fp);	// Cierra el archivo 
+	fclose(fp);	// Cierra el archivo
 	return lines;
 }
 int countLines(FILE* fp)
