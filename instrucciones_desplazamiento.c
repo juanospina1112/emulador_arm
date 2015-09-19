@@ -15,12 +15,12 @@ unsigned long LSR(unsigned long Variable_entrada, unsigned long constante_parame
 unsigned long ROR(unsigned long Variable_entrada,unsigned long constante_parametro)
 {
     unsigned long Variable_salida;
-    Variable_salida=LSR(Variable_salida,Variable_entrada,constante_parametro)+LSL(Variable_salida,Variable_entrada,32-constante_parametro);
+    Variable_salida=LSR(Variable_entrada,constante_parametro)+LSL(Variable_entrada,32-constante_parametro);
     return Variable_salida;
 }
 unsigned long ASR(unsigned long Variable_entrada,unsigned long constante_parametro)
 {
-    unsigned long aux,e;
+    unsigned long aux,aux1;
     unsigned long Variable_salida;
     if((1<<31)&Variable_entrada)
     {
@@ -30,8 +30,8 @@ unsigned long ASR(unsigned long Variable_entrada,unsigned long constante_paramet
 	{
 		aux=0;
 	}
-    e=(e,Variable_entrada,constante_parametro);
-    Variable_salida=e|aux<<31;
+    aux1=(Variable_entrada,constante_parametro);
+    Variable_salida=aux1|aux<<31;
     return Variable_salida;
 }
 unsigned long BIC(unsigned long Variable_entrada)
@@ -53,16 +53,16 @@ unsigned long REV(unsigned long Variable_entrada)
 {
     unsigned long constante_parametro,aux1,aux2,Variable_salida;
     constante_parametro=24;
-    Variable_salida=LSR(Variable_salida,Variable_entrada,constante_parametro)+LSL(Variable_salida,Variable_entrada,constante_parametro);
+    Variable_salida=LSR(Variable_entrada,constante_parametro)+LSL(Variable_entrada,constante_parametro);
     constante_parametro=16;
-    aux1=LSR(aux1,Variable_entrada,constante_parametro);
-    aux2=LSL(aux2,Variable_entrada,constante_parametro);
-    constate_parametro=24;
-    aux1=LSL(aux1,aux1,constante_parametro);
-    aux2=LSR(aux2,aux2,constante_parametro);
-    constate_parametro=16;
-    aux1=LSR(aux1,aux1,constante_parametro);
-    aux2=LSL(aux2,aux2,constante_parametro);
+    aux1=LSR(Variable_entrada,constante_parametro);
+    aux2=LSL(Variable_entrada,constante_parametro);
+    constante_parametro=24;
+    aux1=LSL(aux1,constante_parametro);
+    aux2=LSR(aux2,constante_parametro);
+    constante_parametro=16;
+    aux1=LSR(aux1,constante_parametro);
+    aux2=LSL(aux2,constante_parametro);
     Variable_salida=Variable_salida+aux1+aux2;
 	return Variable_salida;
 }
@@ -70,17 +70,17 @@ unsigned long REV16(unsigned long Variable_entrada)
 {
     unsigned long constante_parametro,aux1,aux2,aux3,aux4,Variable_salida;
     constante_parametro=16;
-    aux1=LSR(Variable_salida,Variable_entrada,constante_parametro);
-    aux3=LSL(Variable_salida,Variable_entrada,coconstante_parametro);
+    aux1=LSR(Variable_entrada,constante_parametro);
+    aux3=LSL(Variable_entrada,constante_parametro);
     constante_parametro=24;
-    aux2=LSL(Variable_salida,aux1,constante_parametro);
-    aux4=LSR(Variable_salida,aux3,constante_parametro);
+    aux2=LSL(aux1,constante_parametro);
+    aux4=LSR(aux3,constante_parametro);
     constante_parametro=8;
-    aux1=LSR(Variable_salida,aux1,constante_parametro);
-    aux3=LSL(Variable_salida,aux3,constante_parametro);
+    aux1=LSR(aux1,constante_parametro);
+    aux3=LSL(aux3,constante_parametro);
     constante_parametro=16;
-    aux1=LSL(Variable_salida,aux1,constante_parametro);
-    aux3=LSR(Variable_salida,aux3,constante_parametro);
+    aux1=LSL(aux1,constante_parametro);
+    aux3=LSR(aux3,constante_parametro);
     Variable_salida=(aux1+aux2)+(aux3+aux4);
 }
 unsigned long REVSH(unsigned long Variable_entrada)

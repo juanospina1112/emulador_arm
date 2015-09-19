@@ -6,6 +6,7 @@
 #include <curses.h>
 #include "decoder.h"
 #include "branch.h"
+#include "instrucciones_desplazamiento.h"
 
 
 
@@ -356,7 +357,216 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 
 //------>> jhon
 
+if(strcmp(instruction.mnemonic,"LSLS"))
 
+      {
+
+        if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=LSL(r[instruction.op2_value],r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=LSL(instruction.op2_value,r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+         {
+            r[instruction.op1_value]=LSL(r[instruction.op2_value],instruction.op3_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"LSRS"))
+
+      {
+
+        if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=LSR(r[instruction.op2_value],r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=LSR(instruction.op2_value,r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+         {
+            r[instruction.op1_value]=LSR(r[instruction.op2_value],instruction.op3_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+
+if(strcmp(instruction.mnemonic,"RORS"))
+
+      {
+
+        if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=ROR(r[instruction.op2_value],r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=ROR(instruction.op2_value,r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+         {
+            r[instruction.op1_value]=ROR(r[instruction.op2_value],instruction.op3_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"ASRS"))
+
+      {
+
+        if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=ASR(r[instruction.op2_value],r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=ASR(instruction.op2_value,r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+         {
+            r[instruction.op1_value]=ASR(r[instruction.op2_value],instruction.op3_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"BICS"))
+
+      {
+
+        if((instruction.op2_type=='R'))
+         {
+            r[instruction.op1_value]=BIC(r[instruction.op2_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#'))
+         {
+            r[instruction.op1_value]=BIC(instruction.op2_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"MVNS"))
+
+      {
+
+        if((instruction.op2_type=='R'))
+         {
+            r[instruction.op1_value]=MVN(r[instruction.op2_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#'))
+         {
+            r[instruction.op1_value]=MVN(instruction.op2_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"RSBS"))
+
+      {
+
+        if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=RSBS(r[instruction.op2_value],r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
+         {
+            r[instruction.op1_value]=RSBS(instruction.op2_value,r[instruction.op3_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+         {
+            r[instruction.op1_value]=RSBS(r[instruction.op2_value],instruction.op3_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"REVS"))
+
+      {
+
+        if((instruction.op2_type=='R'))
+         {
+            r[instruction.op1_value]=REV(r[instruction.op2_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#'))
+         {
+            r[instruction.op1_value]=REV(instruction.op2_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"REV16S"))
+
+      {
+
+        if((instruction.op2_type=='R'))
+         {
+            r[instruction.op1_value]=REV16(r[instruction.op2_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#'))
+         {
+            r[instruction.op1_value]=REV16(instruction.op2_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
+
+if(strcmp(instruction.mnemonic,"REVSHS"))
+
+      {
+
+        if((instruction.op2_type=='R'))
+         {
+            r[instruction.op1_value]=REVSH(r[instruction.op2_value]);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+          if((instruction.op2_type=='#'))
+         {
+            r[instruction.op1_value]=REVSH(instruction.op2_value);
+            ADD(r[instruction.op1_value],0,&bandera);
+         }
+
+      }
 }
 
 
