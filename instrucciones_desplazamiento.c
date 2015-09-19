@@ -1,4 +1,8 @@
 #include "instrucciones_desplazamiento.h"
+void NOP()
+{
+    sleep(1);
+}
 
 unsigned long LSL(unsigned long Variable_entrada,unsigned long constante_parametro)
 {

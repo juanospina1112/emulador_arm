@@ -6,15 +6,14 @@
 #include <curses.h>
 #include "decoder.h"
 #include "branch.h"
-#include "instrucciones_desplazamiento.h"
 
 
 
-void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned long *bandera,unsigned long *pc)
+void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned long *bandera,unsigned long *PC,unsigned long*LR)
 {
     int c;
               /********** codificacion funciones de la alu *****/
-	if( strcmp(instruction.mnemonic,"ADDS") == 0 ){
+	if( strcmp(instruction.mnemonic,"ADDS") == 0){
 
 
             if(instruction.op1_type=='R')
@@ -55,7 +54,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
                 }
             if((instruction.op2_type == 'R' )&&(instruction.op3_type == '#' ))
                 {
-                    r[instruction.op1_value]=ADD(r[instruction.op2_value],instruction.op3_value,&bandera);
+                    ADD(r[instruction.op2_value],instruction.op3_value,&bandera);
                 }
            if((instruction.op2_type == '#' )&&(instruction.op3_type == '#' ))
                 {
@@ -68,6 +67,26 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 
 
 	}
+	if(strcmp(instruction.mnemonic,"CMN") == 0)
+    {
+        if((instruction.op1_type== 'R' )&&(instruction.op2_type =='R' ))
+                {
+                    ADD(r[instruction.op1_value],r[instruction.op2_value],&bandera);
+                }
+            if((instruction.op1_type == '#' )&&(instruction.op2_type== 'R' ))
+                {
+
+                    ADD(instruction.op1_value,r[instruction.op2_value],&bandera);
+                }
+            if((instruction.op1_type == 'R' )&&(instruction.op2_type == '#' ))
+                {
+                    ADD(r[instruction.op1_value],instruction.op2_value,&bandera);
+                }
+           if((instruction.op1_type == '#' )&&(instruction.op2_type == '#' ))
+                {
+                    ADD(instruction.op1_value,instruction.op2_value,&bandera);
+                }
+    }
 	if( strcmp(instruction.mnemonic,"ADCS") == 0)
     {
          if(instruction.op1_type=='R')
@@ -174,6 +193,26 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 
         }
     }
+    if(strcmp(instruction.mnemonic,"TEST") == 0)
+    {
+                    if((instruction.op1_type== 'R' )&&(instruction.op2_type =='R' ))
+                {
+                    AND(r[instruction.op1_value],r[instruction.op2_value],&bandera);
+                }
+           if((instruction.op1_type == '#' )&&(instruction.op2_type== 'R' ))
+                {
+
+                    AND(instruction.op1_value,r[instruction.op2_value],&bandera);
+                }
+           if((instruction.op1_type == 'R' )&&(instruction.op2_type == '#' ))
+                {
+                    AND(r[instruction.op1_value],instruction.op2_value,&bandera);
+                }
+           if((instruction.op1_type == '#' )&&(instruction.op2_type == '#' ))
+                {
+                    AND(instruction.op1_value,instruction.op2_value,&bandera);
+                }
+    }
     if( strcmp(instruction.mnemonic,"EORS") == 0)
     {
          if(instruction.op1_type=='R')
@@ -239,6 +278,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
                         r[instruction.op1_value]=MOV(instruction.op1_value,instruction.op2_value,&bandera);
                         mostrar(r[instruction.op1_value]);
                     }
+
 
     }
     if( strcmp(instruction.mnemonic,"ORRS") == 0)
@@ -345,118 +385,144 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
         }
     }
 
+    if(strcmp(instruction.mnemonic,"CMP") == 0)
+    {
+
+
+                if((instruction.op1_type== 'R' )&&(instruction.op2_type =='R' ))
+                    {
+
+                      SUB(r[instruction.op1_value],r[instruction.op2_value],&bandera);
+                    }
+                if((instruction.op1_type == '#' )&&(instruction.op2_type== 'R' ))
+                    {
+                        SUB(instruction.op1_value,r[instruction.op2_value],&bandera);
+                    }
+                if((instruction.op1_type == 'R' )&&(instruction.op2_type == '#' ))
+                    {
+                      SUB(r[instruction.op1_value],instruction.op2_value,&bandera);
+
+                    }
+                if((instruction.op2_type == '#' )&&(instruction.op3_type == '#' ))
+                    {
+                       SUB(instruction.op1_value,instruction.op2_value,&bandera);
+                    }
+
+    }
+
     /************************************** decodificacion funciones branch *********/
 
 
     //----- >> andres
-	if(strcmp(instruction.mnemonic,"B")==0)
+
+if(strcmp(instruction.mnemonic,"B")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
 		B(&PC,instruction.op1_value);
 	}
 }
 if(strcmp(instruction.mnemonic,"BEQ")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BEQ(&PC,instruction.op1_value,bandera);
+		BEQ(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BNE")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BNE(&PC,instruction.op1_value,bandera);
+		BNE(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BCS")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BCS(&PC,instruction.op1_value,bandera);
+		BCS(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BCC")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BCC(&PC,instruction.op1_value,bandera);
+		BCC(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BMI")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BMI(&PC,instruction.op1_value,bandera);
+		BMI(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BPL")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BPL(&PC,instruction.op1_value,bandera);
+		BPL(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BVS")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BVS(&PC,instruction.op1_value,bandera);
+		BVS(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BVC")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BVC(&PC,instruction.op1_value,bandera);
+		BVC(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BHI")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BHI(&PC,instruction.op1_value,bandera);
+		BHI(&PC,instruction.op1_value,&bandera);
 	}
 }
-if(strcmp(instruction.mnemonic,"BLM")==0)
+if(strcmp(instruction.mnemonic,"BLS")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BLM(&PC,instruction.op1_value,bandera);
+		BLS(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BGE")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BGE(&PC,instruction.op1_value,bandera);
+		BGE(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BLT")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BLT(&PC,instruction.op1_value,bandera);
+		BLT(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BGT")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BGT&PC,instruction.op1_value,bandera);
+		BGT(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BLE")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
-		BLE(&PC,instruction.op1_value,bandera);
+		BLE(&PC,instruction.op1_value,&bandera);
 	}
 }
 if(strcmp(instruction.mnemonic,"BL")==0)
 {
-	if(instruction.op1_type==#)
+	if(instruction.op1_type=='#')
 	{
 		BL(&PC,instruction.op1_value,&LR);
 	}
@@ -481,8 +547,13 @@ if(strcmp(instruction.mnemonic,"BLX")==0)
 
 
 //------>> jhon
+if(strcmp(instruction.mnemonic,"LSLS")==0)
+{
+    NOP();
+}
 
-if(strcmp(instruction.mnemonic,"LSLS"))
+
+if(strcmp(instruction.mnemonic,"LSLS")==0)
 
       {
 
@@ -506,7 +577,7 @@ if(strcmp(instruction.mnemonic,"LSLS"))
 
       }
 
-if(strcmp(instruction.mnemonic,"LSRS"))
+if(strcmp(instruction.mnemonic,"LSRS")==0)
 
       {
 
@@ -531,7 +602,7 @@ if(strcmp(instruction.mnemonic,"LSRS"))
       }
 
 
-if(strcmp(instruction.mnemonic,"RORS"))
+if(strcmp(instruction.mnemonic,"RORS")==0)
 
       {
 
@@ -555,7 +626,7 @@ if(strcmp(instruction.mnemonic,"RORS"))
 
       }
 
-if(strcmp(instruction.mnemonic,"ASRS"))
+if(strcmp(instruction.mnemonic,"ASRS")==0)
 
       {
 
@@ -579,7 +650,7 @@ if(strcmp(instruction.mnemonic,"ASRS"))
 
       }
 
-if(strcmp(instruction.mnemonic,"BICS"))
+if(strcmp(instruction.mnemonic,"BICS")==0)
 
       {
 
@@ -597,7 +668,7 @@ if(strcmp(instruction.mnemonic,"BICS"))
 
       }
 
-if(strcmp(instruction.mnemonic,"MVNS"))
+if(strcmp(instruction.mnemonic,"MVNS")==0)
 
       {
 
@@ -615,7 +686,7 @@ if(strcmp(instruction.mnemonic,"MVNS"))
 
       }
 
-if(strcmp(instruction.mnemonic,"RSBS"))
+if(strcmp(instruction.mnemonic,"RSBS")==0)
 
       {
 
@@ -639,7 +710,7 @@ if(strcmp(instruction.mnemonic,"RSBS"))
 
       }
 
-if(strcmp(instruction.mnemonic,"REVS"))
+if(strcmp(instruction.mnemonic,"REVS")==0)
 
       {
 
@@ -657,7 +728,7 @@ if(strcmp(instruction.mnemonic,"REVS"))
 
       }
 
-if(strcmp(instruction.mnemonic,"REV16S"))
+if(strcmp(instruction.mnemonic,"REV16S")==0)
 
       {
 
@@ -675,7 +746,7 @@ if(strcmp(instruction.mnemonic,"REV16S"))
 
       }
 
-if(strcmp(instruction.mnemonic,"REVSHS"))
+if(strcmp(instruction.mnemonic,"REVSHS")==0)
 
       {
 
@@ -692,13 +763,14 @@ if(strcmp(instruction.mnemonic,"REVSHS"))
          }
 
       }
-}
 
+
+}
 
 instruction_t getInstruction(char* instStr)
 {
 	instruction_t instruction;
-	char* split = (char*)malloc(strlen(instStr));
+	char* split = (char*)malloc(strlen(instStr)+1);
 	int num=0;
 
 	strcpy(split, instStr);
@@ -751,12 +823,12 @@ int readFile(char* filename, ins_t* instructions)
 	if( fp==NULL )
 		return -1;	/* Error al abrir el archivo */
 
-	lines = countLines(fp)-1;	/* Cantidad de líneas*/
+	lines = countLines(fp);	/* Cantidad de líneas*/
 
 	/* Asignación dinámica de memoria para cada instrucción */
 	instructions->array = (char**)malloc(lines*sizeof(char*));
 	while ( fgets(buffer, 50, fp) != NULL && line<lines ){
-        instructions->array[line] = (char*)malloc(strlen(buffer)*sizeof(char));
+        instructions->array[line] = (char*)malloc((strlen(buffer)+1)*sizeof(char));
 		strcpy(instructions->array[line], buffer);
 		line++;
  	}
@@ -770,14 +842,11 @@ int readFile(char* filename, ins_t* instructions)
 int countLines(FILE* fp)
 {
 	int lines=0;
-	int ch;
+	char buffer[50];
 
-	while(!feof(fp))
-	{
-	  ch = fgetc(fp);
-	  if(ch == '\n')
+	while( fgets(buffer, 50, fp) != NULL )
 		lines++;
-	}
+
 	rewind(fp);
 
 	return lines;

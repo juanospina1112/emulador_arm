@@ -1,4 +1,11 @@
 ﻿/**
+* \brief funcion de no hacer nada
+* \
+* \
+* \return void
+*/
+void NOP();
+/**
 * \brief Función de desplazamiento a la izquierda
 * \param unsigned Variable_entrada
 * \param unsigned constante_parametro
