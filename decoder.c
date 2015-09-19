@@ -349,7 +349,132 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 
 
     //----- >> andres
-
+	if(strcmp(instruction.mnemonic,"B")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		B(&PC,instruction.op1_value);
+	}
+}
+if(strcmp(instruction.mnemonic,"BEQ")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BEQ(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BNE")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BNE(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BCS")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BCS(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BCC")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BCC(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BMI")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BMI(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BPL")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BPL(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BVS")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BVS(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BVC")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BVC(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BHI")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BHI(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BLM")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BLM(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BGE")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BGE(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BLT")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BLT(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BGT")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BGT&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BLE")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BLE(&PC,instruction.op1_value,bandera);
+	}
+}
+if(strcmp(instruction.mnemonic,"BL")==0)
+{
+	if(instruction.op1_type==#)
+	{
+		BL(&PC,instruction.op1_value,&LR);
+	}
+}
+if(strcmp(instruction.mnemonic,"BX")==0)
+{
+	if(instruction.op1_type=='R')
+	{
+		BX(&PC,instruction.op1_value);
+	}
+}
+if(strcmp(instruction.mnemonic,"BLX")==0)
+{
+	if(instruction.op1_type=='R')
+	{
+		BLX(&PC,instruction.op1_value,&LR);
+	}
+}
 
 
     /********************************** decodificacion funciones de desplazamiento********/

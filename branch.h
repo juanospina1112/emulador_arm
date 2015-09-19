@@ -117,3 +117,26 @@ void BGT(unsigned long *PC, unsigned long numeroSaltos, unsigned long bandera);
 * \return Función tipo void pues modifica el valor del puntero PC
 */
 void BLE(unsigned long *PC, unsigned long numeroSaltos, unsigned long bandera);
+/**
+* \brief Función encargada de saltar sin condición y modificar LR 
+* \param unsigned *PC
+* \param unsigned numeroSaltos
+* \param unsigned *LR
+* \return Función tipo void pues modifica el valor del puntero PC
+*/
+void BL(unsigned long *PC, unsigned long numeroSaltos, unsigned long *LR);
+/**
+* \brief Función encargada de ir a una posición específica sin condición  
+* \param unsigned *PC
+* \param unsigned posicionSiguiente
+* \return Función tipo void pues modifica el valor del puntero PC
+*/
+void BX(unsigned long *PC, unsigned long posicionSiguiente);
+/**
+* \brief Función encargada de ir a una posición específica sin condición y modificar LR 
+* \param unsigned *PC
+* \param unsigned posicionSiguiente
+* \param unsigned *LR
+* \return Función tipo void pues modifica el valor del puntero PC
+*/
+void BLX(unsigned long *PC, unsigned long posicionSiguiente, unsigned long *LR);
