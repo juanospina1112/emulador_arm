@@ -80,7 +80,7 @@ unsigned long ADD(unsigned long op1,unsigned long op2,unsigned long **bandera)
        }
         else if(**bandera==1)
        {
-           **bandera=19;
+           **bandera=9;
        }
        else
        {
@@ -168,7 +168,7 @@ unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long **bandera)
 		}
         else if(**bandera==1)
 		{
-			**bandera=19;
+			**bandera=9;
 		}
 		else
 		{
@@ -282,7 +282,7 @@ unsigned long EOR(unsigned long op1,unsigned long op2,unsigned long **bandera)
 		}
 		else if(**bandera==1)
 		{
-			**bandera=19;
+			**bandera=9;
 		}
 		else
 		{
@@ -369,7 +369,7 @@ unsigned MOV(unsigned long op1,unsigned long op2,unsigned long **bandera)
 		}
 		else if(**bandera==1)
 		{
-			**bandera=19;
+			**bandera=9;
 		}
 		else
 		{
@@ -476,7 +476,7 @@ unsigned long SUB(unsigned long op1,unsigned long op2,unsigned long **bandera)
 		}
 		else if(**bandera==1)
 		{
-			**bandera=19;
+			**bandera=9;
 		}
 		else
 		{
