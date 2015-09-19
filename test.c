@@ -9,35 +9,23 @@ int main()
 {
     unsigned long r[13]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     r[12]=0 ;// registro reservado para las banderas
-int c,PC=0,pas_dire,k=0,LR=0;
-int i, num_instructions;
-		ins_t read;
-		char** instructions;
-		instruction_t instruction;
-		   /************ lee el programa a ejecutar *****/
-//------- No modificar ------//
-
-		num_instructions = readFile("code.txt", &read);
-		if(num_instructions==-1)
-			return 0;
-
-		if(read.array==NULL)
-			return 0;
-
+	int c,PC=0,pas_dire,k=0,LR=0;
+	int i, num_instructions;
+	ins_t read;
+	char** instructions;
+	instruction_t instruction;
+	/************ lee el programa a ejecutar *****/
+			//------- No modificar ------//
+	num_instructions = readFile("code.txt", &read);
+	if(num_instructions==-1)
+		return 0;
+	if(read.array==NULL)
+		return 0;
 		instructions = read.array; /* Arreglo con las instrucciones */
-
-
 	//---------------------------//
-
     while(1)
-  {
-
-
-
-
-
+	{
 /********************************** interfaz *************************************************************/
-
 
     initscr();		/* Inicia modo curses */
 	curs_set(0);	/* Cursor Invisible */
@@ -48,9 +36,9 @@ int i, num_instructions;
 
 	init_pair(1, COLOR_GREEN, COLOR_WHITE);	/* Pair 1 -> Texto verde
 											   fondo blanco */
- bkgd(COLOR_PAIR(1)); //se activa el color de fondo y de las letras
+	bkgd(COLOR_PAIR(1)); //se activa el color de fondo y de las letras
 
- mostrar_registros(r);
+	mostrar_registros(r);
 
 
 
@@ -84,7 +72,7 @@ int i, num_instructions;
    }
    // recuadro donde se imprime los resultados
 
-c=95;//caracter ascci horizontal
+	c=95;//caracter ascci horizontal
    for(i=30;i<=50;i++)
    {
       //linea horizontal superior
@@ -111,7 +99,7 @@ c=95;//caracter ascci horizontal
 	printw("banderas.");
 	if(r[12]==15)
     {
-       move(14,28);
+    move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=1");
@@ -122,7 +110,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==14)
     {
-           move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=1");
@@ -134,7 +122,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==13)
     {
-           move(14,28);
+    move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=0");
@@ -146,7 +134,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==12)
     {
-           move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=0");
@@ -157,7 +145,8 @@ c=95;//caracter ascci horizontal
 
     }
     else if(r[12]==11)
-    {   move(14,28);
+    {
+	move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=1");
@@ -169,7 +158,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==10)
     {
-           move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=1");
@@ -181,7 +170,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==9)
     {
-           move(14,28);
+    move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=0");
@@ -193,7 +182,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==8)
     {
-            move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=0");
@@ -206,7 +195,7 @@ c=95;//caracter ascci horizontal
 
     else if(r[12]==7)
     {
-            move(14,28);
+    move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=1");
@@ -218,7 +207,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==6)
     {
-          move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=1");
@@ -230,7 +219,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==5)
     {
-          move(14,28);
+    move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=0");
@@ -242,7 +231,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==4)
     {
-          move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=0");
@@ -254,7 +243,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==3)
     {
-          move(14,28);
+    move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=1");
@@ -266,7 +255,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==2)
     {
-          move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=1");
@@ -278,7 +267,7 @@ c=95;//caracter ascci horizontal
     }
     else if(r[12]==1)
     {
-          move(14,28);
+    move(14,28);
 	printw("N=1");
 	move(16,40);
 	printw("Z=0");
@@ -290,7 +279,7 @@ c=95;//caracter ascci horizontal
     }
     else
     {
-          move(14,28);
+    move(14,28);
 	printw("N=0");
 	move(16,40);
 	printw("Z=0");
@@ -327,62 +316,52 @@ c=95;//caracter ascci horizontal
 
 	refresh();	/* Imprime en la pantalla
 					Sin esto el printw no es mostrado */
-if(k==0){
-pas_dire=getch();
-k=1;
-}
+	if(k==0){
+	pas_dire=getch();
+	k=1;
+	}
 
 // forma para que el usuario termine el programa
 
-if(pas_dire!='d')// si se quiere en forma directa o paso a paso
+	if(pas_dire!='d')// si se quiere en forma directa o paso a paso
     {
- c=getch();
-}
-
- if(PC==num_instructions)
- {
-     c='s';
- }
- if(c=='s')
- {
-
-
-        for(i=0; i<num_instructions; i++){
-		free(read.array[i]);
+		c=getch();
+	}
+	if(PC==num_instructions)
+	{
+		c='s';
+	}
+	if(c=='s')
+	{
+		for(i=0; i<num_instructions; i++)
+		{
+			free(read.array[i]);
         }
-	free(read.array);
-        endwin();	/* Finaliza el modo curses */
-        exit(0);
- }
- else if(c=='r')
- {
-     main();
- }
-
-
-
-
-
-
-
-					/******************** decodificacion y ejecucion *************************/
+		free(read.array);
+		endwin();	/* Finaliza el modo curses */
+		exit(0);
+	}
+	else if(c=='r')
+	{
+		main();
+	}
+		/******************** decodificacion y ejecucion *************************/
 
      r[12]=0; // banderas en cero
      // borra toda la pantalla
-for(i=0;i<100;i++)
- {
-     for(k=0;k<40;k++)
-     {
-          move(i,k);
-          printw(" ");
-     }
- }
-
+	for(i=0;i<100;i++)
+	{
+		for(k=0;k<40;k++)
+		{
+			move(i,k);
+			printw(" ");
+		}
+	}		
 
 	instruction = getInstruction(instructions[PC]); // Instrucción en la posición del PC
 	decodeInstruction(instruction,&r,&r[12],&PC,&LR); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
 
 
-PC=PC+1;// aumentar el pc
+	PC=PC+1;// aumentar el pc
     }
 }

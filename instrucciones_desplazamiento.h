@@ -1,7 +1,5 @@
 ﻿/**
-* \brief funcion de no hacer nada
-* \
-* \
+* \brief Función que genera un retardo
 * \return void
 */
 void NOP();
@@ -70,4 +68,3 @@ unsigned long REV16(unsigned long Variable_entrada);
 * \return Un registro de tipo long sin signo con la instrucción realizada
 */
 unsigned long REVSH(unsigned long variable_entrada);
-//NOP(long a,long b);

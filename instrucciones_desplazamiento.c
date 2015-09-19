@@ -96,7 +96,7 @@ unsigned long REVSH(unsigned long Variable_entrada)
         aux=LSL(aux,constante_parametro=16);
     }
     else
-        aux=0;
+    aux=0;
     aux1=LSL(Variable_entrada,constante_parametro=16);
     aux2=LSR(aux1,constante_parametro=24);
     aux1=LSL(aux1,constante_parametro=8);
