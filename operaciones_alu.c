@@ -48,7 +48,7 @@ unsigned long ADD(unsigned long op1,unsigned long op2,unsigned long **bandera)
     {
 
     }
-     else if(((1<<31)|op1)||((1<<31)|op2)||((1<<31)|resultado))
+     else if((op1>>31==0)&&(op2>>31==0)&&(resultado>>31==0))
     {
 
     }
@@ -136,7 +136,7 @@ unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long **bandera)
     {
 
     }
-    else if(((1<<31)|op1)||((1<<31)|op2)||((1<<31)|resultado))
+    else if((op1>>31==0)&&(op2>>31==0)&&(resultado>>31==0))
     {
 
     }
@@ -250,7 +250,7 @@ unsigned long EOR(unsigned long op1,unsigned long op2,unsigned long **bandera)
     {
 
     }
-    else if(((1<<31)|op1)||((1<<31)|op2)||((1<<31)|resultado))
+    else if((op1>>31==0)&&(op2>>31==0)&&(resultado>>31==0))
     {
 
     }
@@ -337,7 +337,7 @@ unsigned MOV(unsigned long op1,unsigned long op2,unsigned long **bandera)
     {
 
     }
-    else if(((1<<31)|op1)||((1<<31)|op2)||((1<<31)|op1))
+    else if((op1>>31==0)&&(op2>>31==0)&&(resultado>>31==0))
     {
 
     }
@@ -444,7 +444,7 @@ unsigned long SUB(unsigned long op1,unsigned long op2,unsigned long **bandera)
     {
 
     }
-    else if(((1<<31)|op1)||((1<<31)|op2)||((1<<31)|resultado))
+    else if((op1>>31==0)&&(op2>>31==0)&&(resultado>>31==0))
     {
 
     }
