@@ -7,7 +7,7 @@
 
 int main()
 {
-    unsigned long r[13]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    unsigned long r[13];
     r[12]=0 ;// registro reservado para las banderas
 	int c,PC=0,pas_dire,k=0,LR=0;
 	int i, num_instructions;
@@ -347,7 +347,7 @@ int main()
 	}
 		/******************** decodificacion y ejecucion *************************/
 
-     r[12]=0; // banderas en cero
+    
      // borra toda la pantalla
 	for(i=0;i<100;i++)
 	{
