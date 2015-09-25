@@ -1,4 +1,4 @@
-﻿/**
+﻿**
 * \brief Función encargada sumar
 * \param unsigned long op1
 * \param unsigned long op2
@@ -54,3 +54,10 @@ unsigned long SUB(unsigned long op1,unsigned long op2,unsigned long **bandera);
 * \return Un dato tipo long sin signo con el resultado de la operación
 */
 unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long **bandera);
+/**
+* \brief Función encagada de modificar las banderas de las funciones desplazamiento
+* \param unsigned long op1
+* \param unsigned long **bandera
+* \return nada
+*/
+void BDES(unsigned long op1,unsigned long **bandera);
