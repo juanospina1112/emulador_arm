@@ -10,10 +10,7 @@ void BEQ(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BNE(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -21,10 +18,7 @@ void BNE(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BCS(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -32,10 +26,7 @@ void BCS(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BCC(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -43,10 +34,7 @@ void BCC(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BMI(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -54,10 +42,7 @@ void BMI(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BPL(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -65,10 +50,7 @@ void BPL(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BVS(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -76,10 +58,7 @@ void BVS(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BVC(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -87,10 +66,7 @@ void BVC(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BHI(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -98,10 +74,7 @@ void BHI(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BLS(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -109,10 +82,7 @@ void BLS(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BGE(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -120,10 +90,7 @@ void BGE(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BLT(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -131,10 +98,7 @@ void BLT(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BGT(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -142,10 +106,7 @@ void BGT(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BLE(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera)
 {
@@ -153,10 +114,7 @@ void BLE(unsigned long **PC, unsigned long numeroSaltos, unsigned long **bandera
     {
         **PC+=numeroSaltos-1; //realiza el salto correspondiente
     }
-    else
-    {
-        **PC+=1; //pasa a la otra instrucción sin realizar el salto
-    }
+
 }
 void BL(unsigned long **PC, unsigned long numeroSaltos, unsigned long **LR)
 {
