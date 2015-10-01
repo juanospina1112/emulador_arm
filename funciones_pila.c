@@ -1,6 +1,7 @@
+#include <stdint.h>
 #include "funciones_pila.h"
 
-void PUSH(unsigned long registros[16], unsigned long *R, unsigned long *memoria)
+void PUSH(unsigned long registros[16], unsigned long *R, uint8_t *memoria)
 {
     unsigned long posicion;
     int i, contador=0;
@@ -11,18 +12,24 @@ void PUSH(unsigned long registros[16], unsigned long *R, unsigned long *memoria)
             contador+=1;
         }
     }
-    posicion=*(R+13)-contador; //cambiar 1*contador a 4*contador
+    posicion=*(R+13)-4*contador;
     for(i=0; i<15; i++)
     {
         if(registros[i]==1)
         {
-            *(memoria+posicion)=*(R+i);
-            posicion+=1;  // cambiar 1 por 4
+            *(memoria+posicion)=(uint8_t)(R[i]);
+             posicion+=1;
+            *(memoria+posicion)=(uint8_t)(R[i]>>8);
+             posicion+=1;
+            *(memoria+posicion)=(uint8_t)(R[i]>>16);
+             posicion+=1;
+            *(memoria+posicion)=(uint8_t)(R[i]>>24);
+            posicion+=1;
         }
     }
-    *(R+13)-=contador; // cambiar 1 por 4
+    *(R+13)-=4*contador;
 }
-void POP(unsigned long registros[16], unsigned long *R, unsigned long *memoria)
+void POP(unsigned long registros[16], unsigned long *R, uint8_t *memoria)
 {
     unsigned long posicion;
     int i=0, contador=0;
@@ -31,7 +38,13 @@ void POP(unsigned long registros[16], unsigned long *R, unsigned long *memoria)
     {
         if(registros[i]==1)
         {
-            *(R+i)=*(memoria+posicion);
+            R[i]=(unsigned long)(memoria[posicion]);
+            posicion+=1;
+            R[i]+=(unsigned long)(memoria[posicion]<<8);
+            posicion+=1;
+            R[i]+=(unsigned long)(memoria[posicion]<<16);
+            posicion+=1;
+            R[i]+=(unsigned long)(memoria[posicion]<<32);
             posicion+=1;
         }
     }
@@ -42,5 +55,5 @@ void POP(unsigned long registros[16], unsigned long *R, unsigned long *memoria)
             contador+=1;
         }
     }
-    *(R+13)+=contador;  //revisar
+    *(R+13)+=4*contador;
 }
