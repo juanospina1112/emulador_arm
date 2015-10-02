@@ -7,11 +7,12 @@
 #include "decoder.h"
 #include "branch.h"
 #include "instrucciones_desplazamiento.h"
+#include <math.h>
 
-void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned long *bandera,unsigned long *PC,unsigned long*LR)
+void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned long *bandera,unsigned long *PC,unsigned long*LR,uint8_t*memoria)
 {
     int auxban;
-    unsigned int aux1,aux2;
+    unsigned long aux1,aux2,des;
 	//            codificacion funciones de la alu
 	if(strcmp(instruction.mnemonic,"ADDS") == 0)
 	{
@@ -225,6 +226,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
     }
     if( (strcmp(instruction.mnemonic,"MOVS") == 0)||(strcmp(instruction.mnemonic,"MOV") == 0))
     {
+
 		if((instruction.op1_type == 'R')&&(instruction.op2_type=='R') )
 		{
 			r[instruction.op1_value]=MOV(r[instruction.op1_value],r[instruction.op2_value],&bandera);
@@ -458,7 +460,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='R')
 		{
-			BX(&PC,instruction.op1_value);
+			BX(&PC,r[instruction.op1_value]);
 		}
 	}
 	if(strcmp(instruction.mnemonic,"BLX")==0)
@@ -475,14 +477,26 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	}
 	if(strcmp(instruction.mnemonic,"LSLS")==0)
 	{
+
+
 	        auxban=*bandera;
-    *bandera=0;
+    if((*bandera==15)||(*bandera==14)||(*bandera==13)||(*bandera==12)||(*bandera==11)||(*bandera==10)||(*bandera==9)||(*bandera==8))
+    {
+        *bandera=8;
+    }
+    else
+    {
+          *bandera=0;
+    }
+
+
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
 		{
-			r[instruction.op1_value]=LSL(r[instruction.op2_value],r[instruction.op3_value]);
-			BDES(r[instruction.op1_value],&bandera);
 			aux1=r[instruction.op3_value];
 			aux2=r[instruction.op2_value];
+			r[instruction.op1_value]=LSL(r[instruction.op2_value],r[instruction.op3_value]);
+			BDES(r[instruction.op1_value],&bandera);
+
 			if((1<<(32-aux1))&aux2)// bandera de carry
     {
 
@@ -498,46 +512,35 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 		{
 			*bandera=6;
 		}
-		else
+		else if(*bandera==8)
+        {
+            *bandera=12;
+        }
+        else if(*bandera==9)
+        {
+            *bandera=13;
+        }
+         else if(*bandera==11)
+        {
+            *bandera=15;
+        }
+        else
 		{
 			*bandera=4;
 		}
     }
 		}
-		if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
-		{
-			r[instruction.op1_value]=LSL(instruction.op2_value,r[instruction.op3_value]);
-			BDES(r[instruction.op1_value],&bandera);
-			aux1=r[instruction.op3_value];
-			aux2=instruction.op2_value;
-			if((1<<(32-aux1))&aux1)// bandera de carry
-    {
 
-		if(*bandera==3)
-		{
-			*bandera=7;
-		}
-		else if(*bandera==1)
-		{
-			*bandera=5;
-		}
-		else if(*bandera==2)
-		{
-			*bandera=6;
-		}
-		else
-		{
-			*bandera=4;
-		}
-    }
-		}
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
 		{
+		    aux1=instruction.op3_value;
+			aux2=r[instruction.op2_value];
 			r[instruction.op1_value]=LSL(r[instruction.op2_value],instruction.op3_value);
 			BDES(r[instruction.op1_value],&bandera);
-			aux1=instruction.op3_value;
-			aux2=r[instruction.op2_value];
-			if(((1<<(32-aux1)))&aux2)// bandera de carry
+
+
+
+			if((1<<(32-aux1))&aux2)// bandera de carry
     {
 
 		if(*bandera==3)
@@ -552,30 +555,46 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 		{
 			*bandera=6;
 		}
-		else
+		else if(*bandera==8)
+        {
+            *bandera=12;
+        }
+        else if(*bandera==9)
+        {
+            *bandera=13;
+        }
+         else if(*bandera==11)
+        {
+            *bandera=15;
+        }
+        else
 		{
 			*bandera=4;
 		}
     }
-		}
 
-if(*bandera==0)
-    {
-        *bandera=auxban;
-    }
-
+	}
 	}
 	if(strcmp(instruction.mnemonic,"LSRS")==0)
 	{
-	       auxban=*bandera;
-    *bandera=0;
+
+    if((*bandera==15)||(*bandera==14)||(*bandera==13)||(*bandera==12)||(*bandera==11)||(*bandera==10)||(*bandera==9)||(*bandera==8))
+    {
+        *bandera=8;
+    }
+    else
+    {
+          *bandera=0;
+    }
+
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
 		{
+		    aux1=r[instruction.op3_value];
+			aux2=r[instruction.op2_value];
 			r[instruction.op1_value]=LSR(r[instruction.op2_value],r[instruction.op3_value]);
 			BDES(r[instruction.op1_value],&bandera);
-			aux1=r[instruction.op3_value];
-			aux2=r[instruction.op2_value];
-			if((1<<(aux1-1))&aux2)// bandera de carry
+
+					if((1<<(aux1-1))&aux2)// bandera de carry
     {
 
 		if(*bandera==3)
@@ -590,46 +609,33 @@ if(*bandera==0)
 		{
 			*bandera=6;
 		}
-		else
+		else if(*bandera==8)
+        {
+            *bandera=12;
+        }
+        else if(*bandera==9)
+        {
+            *bandera=13;
+        }
+         else if(*bandera==11)
+        {
+            *bandera=15;
+        }
+        else
 		{
 			*bandera=4;
 		}
     }
-		}
-		if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
-		{
-		r[instruction.op1_value]=LSR(instruction.op2_value,r[instruction.op3_value]);
-		BDES(r[instruction.op1_value],&bandera);
-		aux1=r[instruction.op3_value];
-			aux2=instruction.op2_value;
-			if((1<<(aux1-1))&aux2)// bandera de carry
-    {
 
-		if(*bandera==3)
-		{
-			*bandera=7;
-		}
-		else if(*bandera==1)
-		{
-			*bandera=5;
-		}
-		else if(*bandera==2)
-		{
-			*bandera=6;
-		}
-		else
-		{
-			*bandera=4;
-		}
-    }
 		}
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
 		{
+		    aux1=instruction.op3_value;
+			aux2=r[instruction.op2_value];
 		r[instruction.op1_value]=LSR(r[instruction.op2_value],instruction.op3_value);
 		BDES(r[instruction.op1_value],&bandera);
-		aux1=instruction.op3_value;
-			aux2=r[instruction.op2_value];
-			if((1<<(aux1-1))&aux2)// bandera de carry
+
+					if((1<<(aux1-1))&aux2)// bandera de carry
     {
 
 		if(*bandera==3)
@@ -639,20 +645,32 @@ if(*bandera==0)
 		else if(*bandera==1)
 		{
 			*bandera=5;
-
 		}
 		else if(*bandera==2)
 		{
 			*bandera=6;
 		}
-		else
+		else if(*bandera==8)
+        {
+            *bandera=12;
+        }
+        else if(*bandera==9)
+        {
+            *bandera=13;
+        }
+         else if(*bandera==11)
+        {
+            *bandera=15;
+        }
+        else
 		{
 			*bandera=4;
 		}
     }
+
 		}
 	}
-	if(strcmp(instruction.mnemonic,"RORS")==0)
+	if(strcmp(instruction.mnemonic,"RORS")==0)//carry negativo  cero
 	{
 
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
@@ -660,49 +678,37 @@ if(*bandera==0)
 			r[instruction.op1_value]=ROR(r[instruction.op2_value],r[instruction.op3_value]);
 			BDES(r[instruction.op1_value],&bandera);
 		}
-		if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
-		{
-			r[instruction.op1_value]=ROR(instruction.op2_value,r[instruction.op3_value]);
-			BDES(r[instruction.op1_value],&bandera);
-		}
+
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
 		{
 			r[instruction.op1_value]=ROR(r[instruction.op2_value],instruction.op3_value);
 			BDES(r[instruction.op1_value],&bandera);
 		}
 	}
-	if(strcmp(instruction.mnemonic,"ASRS")==0)
+	if(strcmp(instruction.mnemonic,"ASRS")==0)//lo mismo
 	{
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
 		{
 			r[instruction.op1_value]=ASR(r[instruction.op2_value],r[instruction.op3_value]);
 			BDES(r[instruction.op1_value],&bandera);
 		}
-		if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
-		{
-			r[instruction.op1_value]=ASR(instruction.op2_value,r[instruction.op3_value]);
-			BDES(r[instruction.op1_value],&bandera);
-		}
+
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
 		{
 			r[instruction.op1_value]=ASR(r[instruction.op2_value],instruction.op3_value);
 			BDES(r[instruction.op1_value],&bandera);
 		}
 	}
-	if(strcmp(instruction.mnemonic,"BICS")==0)
+	if(strcmp(instruction.mnemonic,"BICS")==0)// negatio y cero
 	{
 		if((instruction.op2_type=='R'))
 		{
 			r[instruction.op1_value]=BIC(r[instruction.op2_value]);
 			BDES(r[instruction.op1_value],&bandera);
 		}
-		if((instruction.op2_type=='#'))
-		{
-			r[instruction.op1_value]=BIC(instruction.op2_value);
-			BDES(r[instruction.op1_value],&bandera);
-		}
+
 	}
-	if(strcmp(instruction.mnemonic,"MVNS")==0)
+	if(strcmp(instruction.mnemonic,"MVNS")==0) //cero y negativo
 	{
 		if((instruction.op2_type=='R'))
 		{
@@ -722,16 +728,7 @@ if(*bandera==0)
 			r[instruction.op1_value]=RSBS(r[instruction.op2_value],r[instruction.op3_value]);
 			BDES(r[instruction.op1_value],&bandera);
 		}
-		if((instruction.op2_type=='#')&&(instruction.op3_type=='R'))
-		{
-			r[instruction.op1_value]=RSBS(instruction.op2_value,r[instruction.op3_value]);
-			BDES(r[instruction.op1_value],&bandera);
-		}
-		if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
-		{
-			r[instruction.op1_value]=RSBS(r[instruction.op2_value],instruction.op3_value);
-			BDES(r[instruction.op1_value],&bandera);
-		}
+
 	}
 	if(strcmp(instruction.mnemonic,"REVS")==0)
 	{
@@ -740,11 +737,7 @@ if(*bandera==0)
 			r[instruction.op1_value]=REV(r[instruction.op2_value]);
 
 		}
-		if((instruction.op2_type=='#'))
-		{
-			r[instruction.op1_value]=REV(instruction.op2_value);
 
-		}
 	}
 	if(strcmp(instruction.mnemonic,"REV16S")==0)
 	{
@@ -753,11 +746,7 @@ if(*bandera==0)
 			r[instruction.op1_value]=REV16(r[instruction.op2_value]);
 
 		}
-		if((instruction.op2_type=='#'))
-		{
-			r[instruction.op1_value]=REV16(instruction.op2_value);
 
-		}
 	}
 	if(strcmp(instruction.mnemonic,"REVSHS")==0)
 	{
@@ -766,79 +755,126 @@ if(*bandera==0)
 			r[instruction.op1_value]=REVSH(r[instruction.op2_value]);
 
 		}
-		if((instruction.op2_type=='#'))
-		{
-			r[instruction.op1_value]=REVSH(instruction.op2_value);
 
-		}
 	}
+
+	/**************************** funciones de pila****/
+	if(strcmp(instruction.mnemonic,"PUSH")==0)
+    {
+        PUSH(instruction.registers_list,r,memoria);
+    }
+	if(strcmp(instruction.mnemonic,"POP")==0)
+    {
+        POP(instruction.registers_list,r,memoria);
+    }
 }
+
 instruction_t getInstruction(char* instStr)
 {
-	instruction_t instruction;
+	instruction_t instruction=
+	{
+		.registers_list = {0},
+		.op3_type  = 'N',
+		.op3_value = 0
+	};
 	char* split = (char*)malloc(strlen(instStr)+1);
 	int num=0;
+
 	strcpy(split, instStr);
-	// Obtiene el mnemonico de la instrucción
+	/* Obtiene el mnemonico de la instrucción */
 	split = strtok(split, " ,");
 	strcpy(instruction.mnemonic, split);
-	// Separa los operandos
+
+	/* Separa los operandos */
 	while (split != NULL)
 	{
-		switch(num)
-		{
+		switch(num){
 			case 1:
-				instruction.op1_type  = split[0];
-				instruction.op1_value = (uint32_t)strtol(split+1, NULL, 0);
-			break;
+				if(split[0] == '{'){
+					instruction.op1_type  = split[0];
+					split++;
+					do{
+						if(split[0]=='L')
+							instruction.registers_list[14] = 1;
+						else if(split[0]=='P')
+							instruction.registers_list[15] = 1;
+						else
+							instruction.registers_list[(uint8_t)strtoll(split+1, NULL, 0)] = 1;
+
+						split = strtok(NULL, ",");
+					}while(split != NULL);
+				}else{
+					instruction.op1_type  = split[0];
+					instruction.op1_value = (uint32_t)strtoll(split+1, NULL, 0);
+				}
+				break;
+
 			case 2:
 				instruction.op2_type  = split[0];
-				instruction.op2_value = (uint32_t)strtol(split+1, NULL, 0);
+				instruction.op2_value = (uint32_t)strtoll(split+1, NULL, 0);
 				break;
+
 			case 3:
 				instruction.op3_type  = split[0];
-				instruction.op3_value = (uint32_t)strtol(split+1, NULL, 0);
+				instruction.op3_value = (uint32_t)strtoll(split+1, NULL, 0);
 				break;
 		}
-		split = strtok(NULL, " ,.");
-		num++;
+		if(split != NULL){
+			split = strtok(NULL, " ,.");
+			num++;
+		}
 	}
-	if(num==3)
-	{
-		instruction.op3_type  = 'N';
-		instruction.op3_value = 0;
+
+	if(instruction.op1_type == 'L'){
+		instruction.op1_value = 14;
+		instruction.op1_type = 'R';
 	}
+
+	if(instruction.op1_type == '{'){
+		instruction.op1_type = 'P';
+	}
+
 	free(split);
+
 	return instruction;
 }
+
 int readFile(char* filename, ins_t* instructions)
 {
-	FILE* fp;	// Puntero a un archivo
-	int lines;	// Cantidad de líneas del archivo
-	int line=0;	// Línea leida
-	char buffer[50]; // Almacena la cadena leida
-	fp = fopen(filename, "r");	// Abrir el archivo como solo lectura
+	FILE* fp;	/* Puntero a un archivo  */
+	int lines;	/* Cantidad de líneas del archivo */
+	int line=0;	/* Línea leida */
+	char buffer[50]; /* Almacena la cadena leida */
+
+	fp = fopen(filename, "r");	/* Abrir el archivo como solo lectura */
 	if( fp==NULL )
-		return -1;	// Error al abrir el archivo
-	lines = countLines(fp);	// Cantidad de líneas
-	// Asignación dinámica de memoria para cada instrucción
+		return -1;	/* Error al abrir el archivo */
+
+	lines = countLines(fp);	/* Cantidad de líneas*/
+
+	/* Asignación dinámica de memoria para cada instrucción */
 	instructions->array = (char**)malloc(lines*sizeof(char*));
-	while ( fgets(buffer, 50, fp) != NULL && line<lines )
-	{
+	while ( fgets(buffer, 50, fp) != NULL && line<lines ){
         instructions->array[line] = (char*)malloc((strlen(buffer)+1)*sizeof(char));
 		strcpy(instructions->array[line], buffer);
 		line++;
  	}
-	fclose(fp);	// Cierra el archivo
+
+	fclose(fp);	/* Cierra el archivo */
+
 	return lines;
 }
+
+
 int countLines(FILE* fp)
 {
 	int lines=0;
 	char buffer[50];
+
 	while( fgets(buffer, 50, fp) != NULL )
 		lines++;
+
 	rewind(fp);
+
 	return lines;
 }
-

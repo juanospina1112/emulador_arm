@@ -1,4 +1,4 @@
-#include <stdio.h>
+include <stdio.h>
 #include "operaciones_alu.h"
 unsigned long resultado;
 int auxban;
@@ -100,7 +100,7 @@ auxban=**bandera;
 }
 unsigned long ADC(unsigned long op1,unsigned long op2,unsigned long **bandera)
 {
-    if((**bandera==7)||(**bandera==5)||(**bandera==6)||(**bandera==4))
+    if((**bandera==7)||(**bandera==5)||(**bandera==6)||(**bandera==4)||(**bandera==12)||(**bandera==13)||(**bandera==15))
     {
         resultado=op1+op2;
         resultado=resultado+1;
@@ -482,7 +482,16 @@ void BDES(unsigned long op1,unsigned long **bandera)
 
     if((1<<31)&op1) //bandera negativo
     {
-		**bandera=1;
+		if(**bandera==8)
+            {
+                **bandera=9;
+
+            }
+		  else
+            {
+		       **bandera=1;
+		    }
+
     }
     if(op1==0) // bandera cero
     {
@@ -490,14 +499,14 @@ void BDES(unsigned long op1,unsigned long **bandera)
 		{
 			**bandera=3;
 		}
-		else
+		else if(**bandera==9)
 		{
-			**bandera=2;
+			**bandera=11;
 		}
+		else
+            {
+                **bandera=2;
+            }
     }
-
-
-
-
 
 }

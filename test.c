@@ -1,16 +1,33 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "registro.h"
 #include "operaciones_alu.h"
 #include <curses.h>
 #include "decoder.h"
-
+#include <stdint.h>
 int main()
 {
-    unsigned long r[13];
+    unsigned long r[16]={0,0,0,0,0,0,0,0,0,0,0,0,0};
+    uint8_t memoria[256];
+    int i, j, h, num_instructions;
+    for(i=0; i<256; i++)
+    {
+        memoria[i]=255;
+    }
     r[12]=0 ;// registro reservado para las banderas
-	int c,PC=0,pas_dire,k=0,LR=0;
-	int i, num_instructions;
+    r[13]=256;// SP
+    r[14]=0;//LR
+    r[15]=0;//PC
+
+    /****** crar memoria***/
+    // para subir se cambio test.c y decorder.h.c y  alu.c
+
+
+
+
+	int c,pas_dire,k=0;
+
 	ins_t read;
 	char** instructions;
 	instruction_t instruction;
@@ -23,11 +40,16 @@ int main()
 		return 0;
 		instructions = read.array; /* Arreglo con las instrucciones */
 	//---------------------------//
+
+
     while(1)
 	{
+
+
+instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
 /********************************** interfaz *************************************************************/
 
-    initscr();		/* Inicia modo curses */
+initscr();		/* Inicia modo curses */
 	curs_set(0);	/* Cursor Invisible */
 
 	noecho();		/* No imprimir los caracteres leidos */
@@ -37,6 +59,7 @@ int main()
 	init_pair(1, COLOR_GREEN, COLOR_WHITE);	/* Pair 1 -> Texto verde
 											   fondo blanco */
 	bkgd(COLOR_PAIR(1)); //se activa el color de fondo y de las letras
+    init_pair(2, COLOR_BLACK, COLOR_WHITE);
 
 	mostrar_registros(r);
 
@@ -299,7 +322,7 @@ int main()
 	move(8, 60);
 	printw("linea de codigo en ejecucion");
 	move(10, 60);
-	printw("%s",instructions[PC]);
+	printw("%s",instructions[r[15]]);
 	move(34, 3);
 	printw("s:: salir");
 	move(34, 15);
@@ -308,18 +331,30 @@ int main()
 	printw("p::paso a paso");
 	move(34, 42);
 	printw("d::directo");
+	move(34, 58);
+	printw("m::mostrar memoria/pro");
 	move(14,60);
-	printw("PC=%d",2*PC);
+	printw("PC=%d",2*r[15]);
 	move(16,60);
-	printw("LR=%d",2*LR);
+	printw("LR=%d",2*r[14]);
+	move(18,60);
+	printw("SP=0x%0.8X",536870912+r[13]);
+
+
+
+
+
 
 
 	refresh();	/* Imprime en la pantalla
 					Sin esto el printw no es mostrado */
-	if(k==0){
+
+	    /*************** rutinas de salida  y entrada***/
+	    if(k==0){
 	pas_dire=getch();
 	k=1;
 	}
+
 
 // forma para que el usuario termine el programa
 
@@ -327,7 +362,7 @@ int main()
     {
 		c=getch();
 	}
-	if(PC==num_instructions)
+	if(r[15]==num_instructions+1)
 	{
 		c='s';
 	}
@@ -345,23 +380,38 @@ int main()
 	{
 		main();
 	}
-		/******************** decodificacion y ejecucion *************************/
 
-    
+
+
      // borra toda la pantalla
-	for(i=0;i<100;i++)
+	for(i=0;i<40;i++)
 	{
-		for(k=0;k<40;k++)
+		for(k=0;k<100;k++)
+		{
+			move(i,k);
+			printw(" ");
+		}
+	}
+	if(c=='m')
+    {
+        mostrar_memoria(memoria);
+    }
+    // borra toda la pantalla
+	for(i=0;i<40;i++)
+	{
+		for(k=0;k<100;k++)
 		{
 			move(i,k);
 			printw(" ");
 		}
 	}
 
-	instruction = getInstruction(instructions[PC]); // Instrucción en la posición del PC
-	decodeInstruction(instruction,&r,&r[12],&PC,&LR); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
 
 
-	PC=PC+1;// aumentar el pc
+/******************** decodificacion y ejecucion *************************/
+
+	decodeInstruction(instruction,&r,&r[12],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
+
+r[15]=r[15]+1;// aumentar el pc
     }
 }
