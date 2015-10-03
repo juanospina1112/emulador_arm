@@ -6,6 +6,7 @@
 #include <curses.h>
 #include "decoder.h"
 #include <stdint.h>
+char** instructions;
 int main()
 {
     unsigned long r[16]={0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -29,26 +30,18 @@ int main()
 	int c,pas_dire,k=0;
 
 	ins_t read;
-	char** instructions;
+
 	instruction_t instruction;
 	/************ lee el programa a ejecutar *****/
 			//------- No modificar ------//
-	num_instructions = readFile("code.txt", &read);
+	num_instructions = readFile("pruebaRam.txt", &read);
 	if(num_instructions==-1)
 		return 0;
 	if(read.array==NULL)
 		return 0;
 		instructions = read.array; /* Arreglo con las instrucciones */
 	//---------------------------//
-
-
-    while(1)
-	{
-
-
-instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
-/********************************** interfaz *************************************************************/
-
+/****+ declaraciones de interfaz**/
 initscr();		/* Inicia modo curses */
 	curs_set(0);	/* Cursor Invisible */
 
@@ -61,6 +54,91 @@ initscr();		/* Inicia modo curses */
 	bkgd(COLOR_PAIR(1)); //se activa el color de fondo y de las letras
     init_pair(2, COLOR_BLACK, COLOR_WHITE);
 
+    while(1)
+	{
+
+
+instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
+/********************************** interfaz *************************************************************/
+
+
+
+
+interfaz(r);
+
+
+	    /*************** rutinas de salida  y entrada***/
+	    if(k==0){
+	pas_dire=getch();
+	k=1;
+	}
+
+
+// forma para que el usuario termine el programa
+
+	if(pas_dire!='d')// si se quiere en forma directa o paso a paso
+    {
+		c=getch();
+
+	}
+	if(r[15]==num_instructions+1)
+	{
+		c='s';
+	}
+	if(c=='s')
+	{
+		for(i=0; i<num_instructions; i++)
+		{
+			free(read.array[i]);
+        }
+		free(read.array);
+		endwin();	/* Finaliza el modo curses */
+		exit(0);
+	}
+	else if(c=='r')
+	{
+		main();
+	}
+
+
+
+     // borra toda la pantalla
+	for(i=0;i<40;i++)
+	{
+		for(k=0;k<100;k++)
+		{
+			move(i,k);
+			printw(" ");
+		}
+	}
+	if(c=='m')
+    {
+        mostrar_memoria(memoria);// funcion donde se muesta la memoria
+        interfaz(r);
+        getch();
+    }
+    // borra toda la pantalla
+	for(i=0;i<40;i++)
+	{
+		for(k=0;k<100;k++)
+		{
+			move(i,k);
+			printw(" ");
+		}
+	}
+
+
+
+/******************** decodificacion y ejecucion *************************/
+
+	decodeInstruction(instruction,&r,&r[12],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
+
+r[15]=r[15]+1;// aumentar el pc
+    }
+}
+interfaz(unsigned long r[16])
+{
+int c,i;
 	mostrar_registros(r);
 
 
@@ -341,77 +419,7 @@ initscr();		/* Inicia modo curses */
 	printw("SP=0x%0.8X",536870912+r[13]);
 
 
-
-
-
-
-
 	refresh();	/* Imprime en la pantalla
 					Sin esto el printw no es mostrado */
 
-	    /*************** rutinas de salida  y entrada***/
-	    if(k==0){
-	pas_dire=getch();
-	k=1;
-	}
-
-
-// forma para que el usuario termine el programa
-
-	if(pas_dire!='d')// si se quiere en forma directa o paso a paso
-    {
-		c=getch();
-	}
-	if(r[15]==num_instructions+1)
-	{
-		c='s';
-	}
-	if(c=='s')
-	{
-		for(i=0; i<num_instructions; i++)
-		{
-			free(read.array[i]);
-        }
-		free(read.array);
-		endwin();	/* Finaliza el modo curses */
-		exit(0);
-	}
-	else if(c=='r')
-	{
-		main();
-	}
-
-
-
-     // borra toda la pantalla
-	for(i=0;i<40;i++)
-	{
-		for(k=0;k<100;k++)
-		{
-			move(i,k);
-			printw(" ");
-		}
-	}
-	if(c=='m')
-    {
-        mostrar_memoria(memoria);
-    }
-    // borra toda la pantalla
-	for(i=0;i<40;i++)
-	{
-		for(k=0;k<100;k++)
-		{
-			move(i,k);
-			printw(" ");
-		}
-	}
-
-
-
-/******************** decodificacion y ejecucion *************************/
-
-	decodeInstruction(instruction,&r,&r[12],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
-
-r[15]=r[15]+1;// aumentar el pc
-    }
 }

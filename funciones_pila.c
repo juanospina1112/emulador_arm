@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "funciones_pila.h"
 
-void PUSH(unsigned long registros[16], unsigned long *R, uint8_t *memoria)
+void PUSH(uint8_t registros[16], unsigned long *R, uint8_t *memoria)
 {
     unsigned long posicion;
     int i, contador=0;
@@ -29,7 +29,7 @@ void PUSH(unsigned long registros[16], unsigned long *R, uint8_t *memoria)
     }
     *(R+13)-=4*contador;
 }
-void POP(unsigned long registros[16], unsigned long *R, uint8_t *memoria)
+void POP(uint8_t registros[16], unsigned long *R, uint8_t *memoria)
 {
     unsigned long posicion;
     int i=0, contador=0;
