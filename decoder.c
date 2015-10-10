@@ -767,6 +767,117 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
     {
         POP(instruction.registers_list,r,memoria);
     }
+
+/************ funciones load***/
+
+if(strcmp(instruction.mnemonic,"LDR")==0)
+{
+    if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+    {
+        r[instruction.op1_value]=LDR(r[instruction.op2_value],r[instruction.op3_value],memoria);
+
+
+    }
+     if((instruction.op2_type=='PC')&&(instruction.op3_type=='#'))
+     {
+         instruction.op3_value= instruction.op3_value<<2;
+         r[instruction.op1_value]=LDR(r[15],(uint32_t) (instruction.op3_value),memoria);
+     }
+      if((instruction.op2_type=='SP')&&(instruction.op3_type=='#'))
+     {
+         instruction.op3_value= instruction.op3_value<<2;
+         r[instruction.op1_value]=LDR(r[13],(uint32_t) (instruction.op3_value),memoria);
+     }
+     if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+     {
+         instruction.op3_value= instruction.op3_value<<2;
+         r[instruction.op1_value]=LDR(r[instruction.op2_value],(uint32_t) (instruction.op3_value),memoria);
+     }
+
+
+}
+if(strcmp(instruction.mnemonic,"LDRB")==0)
+{
+    if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+     {
+         r[instruction.op1_value]=LDRB(r[instruction.op2_value],r[instruction.op3_value],memoria);
+     }
+     if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+     {
+         r[instruction.op1_value]=LDR(r[instruction.op2_value],(uint32_t) (instruction.op3_value),memoria);
+     }
+
+}
+if(strcmp(instruction.mnemonic,"LDRH")==0)
+{
+    if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+     {
+         r[instruction.op1_value]=LDRH(r[instruction.op2_value],r[instruction.op3_value],memoria);
+     }
+      if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+     {
+         instruction.op3_value= instruction.op3_value<<1;
+         r[instruction.op1_value]=LDRH(r[instruction.op2_value],(uint32_t) (instruction.op3_value),memoria);
+     }
+}
+if(strcmp(instruction.mnemonic,"LDRSB")==0)
+{
+     if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+     {
+         r[instruction.op1_value]=LDRSB(r[instruction.op2_value],r[instruction.op3_value],memoria);
+     }
+}
+if(strcmp(instruction.mnemonic,"LDRSH")==0)
+{
+     if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+     {
+         r[instruction.op1_value]=LDRSH(r[instruction.op2_value],r[instruction.op3_value],memoria);
+     }
+}
+if(strcmp(instruction.mnemonic,"STR")==0)
+{
+     if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+     {
+         r[instruction.op1_value]=STR(r[instruction.op2_value],r[instruction.op3_value],memoria);
+     }
+      if((instruction.op2_type=='SP')&&(instruction.op3_type=='#'))
+     {
+         instruction.op3_value=instruction.op3_value<<2;
+         r[instruction.op1_value]=STR(r[13],(uint32_t)(instruction.op3_value),memoria);
+     }
+      if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+     {
+         instruction.op3_value=instruction.op3_value<<2;
+         r[instruction.op1_value]=STR(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+     }
+}
+if(strcmp(instruction.mnemonic,"STRB")==0)
+{
+     if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+     {
+         r[instruction.op1_value]=STRB(r[instruction.op2_value],r[instruction.op3_value],memoria);
+     }
+     if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+     {
+
+         r[instruction.op1_value]=STRB(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+     }
+
+}
+if(strcmp(instruction.mnemonic,"STRH")==0)
+{
+  if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
+     {
+         r[instruction.op1_value]=STRH(r[instruction.op2_value],r[instruction.op3_value],memoria);
+     }
+      if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
+     {
+         instruction.op3_value=instruction.op3_value<<1;
+         r[instruction.op1_value]=STR(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+     }
+}
+
+
 }
 
 instruction_t getInstruction(char* instStr)
@@ -810,6 +921,9 @@ instruction_t getInstruction(char* instStr)
 				break;
 
 			case 2:
+				if(split[0] == '[')
+					split++;
+
 				instruction.op2_type  = split[0];
 				instruction.op2_value = (uint32_t)strtoll(split+1, NULL, 0);
 				break;
@@ -878,3 +992,4 @@ int countLines(FILE* fp)
 
 	return lines;
 }
+
