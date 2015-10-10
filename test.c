@@ -9,14 +9,18 @@
 char** instructions;
 int main()
 {
-    unsigned long r[16]={0,0,0,0,0,0,0,0,0,0,0,0,0};
-    uint8_t memoria[256];
-    int i, j, h, num_instructions;
+    unsigned long r[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    uint8_t memoria[256],peri[32],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1};
+    int i, j, h, num_instructions,interrupcion=0;
     for(i=0; i<256; i++)
     {
         memoria[i]=255;
     }
-    r[12]=0 ;// registro reservado para las banderas
+    for(i=0; i<32; i++)
+    {
+        peri[i]=0;
+    }
+    r[16]=0 ;// registro reservado para las banderas
     r[13]=256;// SP
     r[14]=0;//LR
     r[15]=0;//PC
@@ -34,7 +38,7 @@ int main()
 	instruction_t instruction;
 	/************ lee el programa a ejecutar *****/
 			//------- No modificar ------//
-	num_instructions = readFile("pruebaRam.txt", &read);
+	num_instructions = readFile("code.txt", &read);
 	if(num_instructions==-1)
 		return 0;
 	if(read.array==NULL)
@@ -128,10 +132,43 @@ interfaz(r);
 	}
 
 
+/****************** verificacion de interrupcion***/
 
+ for(i=0; i<32; i++)
+    {
+        if(peri[i]==1)
+        {
+             interrupcion=1;
+              break;
+        }
+    }
+if(interrupcion==1)
+{
+    if(r[15]==0xffffffff)
+    {
+        POPINT(codinter,r,memoria);
+        interrupcion=0;
+    }
+    else
+    {
+        for(i=0; i<32; i++)
+        {
+            if(peri[i]==1)
+            {
+                PUSHINT(codinter,r,memoria);
+                r[14]=0xffffffff;
+                r[15]=i+1;
+                break;
+            }
+
+        }
+
+    }
+}
 /******************** decodificacion y ejecucion *************************/
 
-	decodeInstruction(instruction,&r,&r[12],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
+
+	decodeInstruction(instruction,&r,&r[16],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
 
 r[15]=r[15]+1;// aumentar el pc
     }
@@ -198,7 +235,7 @@ int c,i;
 	move(12,30);	/* Mueve el cursor a la posición y=12, x=30*/
 	    /************* para las banderas ***/
 	printw("banderas.");
-	if(r[12]==15)
+	if(r[16]==15)
     {
     move(14,28);
 	printw("N=1");
@@ -209,7 +246,7 @@ int c,i;
 	move(16,28);
 	printw("V=1");
     }
-    else if(r[12]==14)
+    else if(r[16]==14)
     {
     move(14,28);
 	printw("N=0");
@@ -221,7 +258,7 @@ int c,i;
 	printw("V=1");
 
     }
-    else if(r[12]==13)
+    else if(r[16]==13)
     {
     move(14,28);
 	printw("N=1");
@@ -233,7 +270,7 @@ int c,i;
 	printw("V=1");
 
     }
-    else if(r[12]==12)
+    else if(r[16]==12)
     {
     move(14,28);
 	printw("N=0");
@@ -245,7 +282,7 @@ int c,i;
 	printw("V=1");
 
     }
-    else if(r[12]==11)
+    else if(r[16]==11)
     {
 	move(14,28);
 	printw("N=1");
@@ -257,7 +294,7 @@ int c,i;
 	printw("V=1");
 
     }
-    else if(r[12]==10)
+    else if(r[16]==10)
     {
     move(14,28);
 	printw("N=0");
@@ -269,7 +306,7 @@ int c,i;
 	printw("V=1");
 
     }
-    else if(r[12]==9)
+    else if(r[16]==9)
     {
     move(14,28);
 	printw("N=1");
@@ -281,7 +318,7 @@ int c,i;
 	printw("V=1");
 
     }
-    else if(r[12]==8)
+    else if(r[16]==8)
     {
     move(14,28);
 	printw("N=0");
@@ -294,7 +331,7 @@ int c,i;
 
     }
 
-    else if(r[12]==7)
+    else if(r[16]==7)
     {
     move(14,28);
 	printw("N=1");
@@ -306,7 +343,7 @@ int c,i;
 	printw("V=0");
 
     }
-    else if(r[12]==6)
+    else if(r[16]==6)
     {
     move(14,28);
 	printw("N=0");
@@ -318,7 +355,7 @@ int c,i;
 	printw("V=0");
 
     }
-    else if(r[12]==5)
+    else if(r[16]==5)
     {
     move(14,28);
 	printw("N=1");
@@ -330,7 +367,7 @@ int c,i;
 	printw("V=0");
 
     }
-    else if(r[12]==4)
+    else if(r[16]==4)
     {
     move(14,28);
 	printw("N=0");
@@ -342,7 +379,7 @@ int c,i;
 	printw("V=0");
 
     }
-    else if(r[12]==3)
+    else if(r[16]==3)
     {
     move(14,28);
 	printw("N=1");
@@ -354,7 +391,7 @@ int c,i;
 	printw("V=0");
 
     }
-    else if(r[12]==2)
+    else if(r[16]==2)
     {
     move(14,28);
 	printw("N=0");
@@ -366,7 +403,7 @@ int c,i;
 	printw("V=0");
 
     }
-    else if(r[12]==1)
+    else if(r[16]==1)
     {
     move(14,28);
 	printw("N=1");
