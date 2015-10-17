@@ -1,4 +1,5 @@
 
+#include "io.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "registro.h"
@@ -6,30 +7,27 @@
 #include <curses.h>
 #include "decoder.h"
 #include <stdint.h>
+extern uint8_t irq[16];
 char** instructions;
 int main()
 {
     unsigned long r[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    uint8_t memoria[256],peri[32],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1};
+    uint8_t memoria[256],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1},data;
     int i, j, h, num_instructions,interrupcion=0;
+    keypad(stdscr, TRUE);
+
     for(i=0; i<256; i++)
     {
         memoria[i]=255;
     }
     for(i=0; i<32; i++)
     {
-        peri[i]=0;
+        irq[i]=0;
     }
     r[16]=0 ;// registro reservado para las banderas
     r[13]=256;// SP
     r[14]=0;//LR
     r[15]=0;//PC
-
-    /****** crar memoria***/
-    // para subir se cambio test.c y decorder.h.c y  alu.c
-
-
-
 
 	int c,pas_dire,k=0;
 
@@ -45,46 +43,110 @@ int main()
 		return 0;
 		instructions = read.array; /* Arreglo con las instrucciones */
 	//---------------------------//
-/****+ declaraciones de interfaz**/
-initscr();		/* Inicia modo curses */
+    /****+ declaraciones de interfaz**/
+    initscr();		/* Inicia modo curses */
 	curs_set(0);	/* Cursor Invisible */
 
 	noecho();		/* No imprimir los caracteres leidos */
 
 	start_color();	/* Permite manejar colores */
-
-	init_pair(1, COLOR_GREEN, COLOR_WHITE);	/* Pair 1 -> Texto verde
+    init_pair(1, COLOR_GREEN, COLOR_WHITE);	/* Pair 1 -> Texto verde
 											   fondo blanco */
-	bkgd(COLOR_PAIR(1)); //se activa el color de fondo y de las letras
+	 //se activa el color de fondo y de las letras
     init_pair(2, COLOR_BLACK, COLOR_WHITE);
+
+    initIO();
+    attron(COLOR_PAIR(1));
+    bkgd(COLOR_PAIR(1));
 
     while(1)
 	{
 
-
-instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
-/********************************** interfaz *************************************************************/
-
-
-
-
-interfaz(r);
+        instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
+        interfaz(r);
 
 
 	    /*************** rutinas de salida  y entrada***/
-	    if(k==0){
-	pas_dire=getch();
-	k=1;
-	}
+        if(k==0)// si se quiere en forma directa o paso a paso
+	    {
+            pas_dire=getch();
+            k=1;
+        }
 
 
-// forma para que el usuario termine el programa
+        // forma para que el usuario termine el programa
 
-	if(pas_dire!='d')// si se quiere en forma directa o paso a paso
-    {
-		c=getch();
+        if(pas_dire!='d')
+        {
+            c=getch();
 
-	}
+            switch(c)
+                {
+                    case 'r':
+                        main();
+                        break;
+                    case 'm':
+                          // borrar pantalla
+                        for(i=0;i<40;i++)
+                        {
+                            for(k=0;k<100;k++)
+                            {
+                                move(i,k);
+                                printw(" ");
+                            }
+                        }
+                        mostrar_memoria(memoria);// funcion donde se muesta la memoria
+                        interfaz(r);
+                        break;
+                    case 't':
+                        // borra toda la pantalla
+                        for(i=0;i<40;i++)
+                        {
+                            for(k=0;k<100;k++)
+                            {
+                                move(i,k);
+                                printw(" ");
+                            }
+                        }
+                        attroff(COLOR_PAIR(1));
+                        showPorts();// funcion donde se muesta los puertos
+                        getch();
+                        attron(COLOR_PAIR(1));
+                        interfaz(r);
+                        break;
+                    case 's':
+                        for(i=0; i<num_instructions; i++)
+                        {
+                            free(read.array[i]);
+                        }
+                        free(read.array);
+                        endwin();	/* Finaliza el modo curses */
+                        exit(0);
+                        break;
+                    case 'a':
+                        if(c==KEY_F(1))
+                        {
+                            if(h=0)
+                            {
+                              changePinPortA(0,HIGH);
+                              h=1;
+                            }
+                            else
+                            {
+                                changePinPortA(0,LOW);
+                                h=0;
+                            }
+
+                        }
+                        break;
+                    case 'b':
+
+                }
+
+        }
+
+
+
 	if(r[15]==num_instructions+1)
 	{
 		c='s';
@@ -99,28 +161,8 @@ interfaz(r);
 		endwin();	/* Finaliza el modo curses */
 		exit(0);
 	}
-	else if(c=='r')
-	{
-		main();
-	}
 
 
-
-     // borra toda la pantalla
-	for(i=0;i<40;i++)
-	{
-		for(k=0;k<100;k++)
-		{
-			move(i,k);
-			printw(" ");
-		}
-	}
-	if(c=='m')
-    {
-        mostrar_memoria(memoria);// funcion donde se muesta la memoria
-        interfaz(r);
-        getch();
-    }
     // borra toda la pantalla
 	for(i=0;i<40;i++)
 	{
@@ -132,28 +174,29 @@ interfaz(r);
 	}
 
 
-/****************** verificacion de interrupcion***/
+    /****************** verificacion de interrupcion***/
 
- for(i=0; i<32; i++)
+    for(i=0; i<16; i++)
     {
-        if(peri[i]==1)
+        if(irq[i]==1)
         {
              interrupcion=1;
               break;
         }
     }
-if(interrupcion==1)
-{
-    if(r[15]==0xffffffff)
+    if(interrupcion==1)
     {
-        POPINT(codinter,r,memoria);
-        interrupcion=0;
+        if(r[15]==0xffffffff)
+        {
+            POPINT(codinter,r,memoria);
+            interrupcion=0;
+        }
     }
     else
     {
-        for(i=0; i<32; i++)
+        for(i=0; i<16; i++)
         {
-            if(peri[i]==1)
+            if(irq[i]==1)
             {
                 PUSHINT(codinter,r,memoria);
                 r[14]=0xffffffff;
@@ -164,13 +207,15 @@ if(interrupcion==1)
         }
 
     }
-}
-/******************** decodificacion y ejecucion *************************/
 
+    /******************** decodificacion y ejecucion *************************/
 
-	decodeInstruction(instruction,&r,&r[16],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
+    if((c=='p')||(c=='d'))
+    {
+        decodeInstruction(instruction,&r,&r[16],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
+        r[15]=r[15]+1;// aumentar el pc
+    }
 
-r[15]=r[15]+1;// aumentar el pc
     }
 }
 interfaz(unsigned long r[16])

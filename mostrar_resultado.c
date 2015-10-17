@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 
+
 void mostrar(unsigned long resultado)
 {
     move(8,32);

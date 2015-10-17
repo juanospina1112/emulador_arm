@@ -723,8 +723,10 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	}
 	if(strcmp(instruction.mnemonic,"RSBS")==0)
 	{
+
 		if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
 		{
+
 			r[instruction.op1_value]=RSBS(r[instruction.op2_value],r[instruction.op3_value]);
 			BDES(r[instruction.op1_value],&bandera);
 		}
@@ -772,6 +774,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 
 if(strcmp(instruction.mnemonic,"LDR")==0)
 {
+
     if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
     {
         r[instruction.op1_value]=LDR(r[instruction.op2_value],r[instruction.op3_value],memoria);

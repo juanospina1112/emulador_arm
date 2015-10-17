@@ -2,13 +2,20 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "LDR-STR.h"
-
+unsigned long address;
+// s debe recibir la direccion osease Rn+Rm desplazaar para saber en q lugar de la memory esta luego casting 8 a la direccion para manejarla con la memory real
 unsigned long LDR(unsigned long Rn,unsigned long Rm,uint8_t *memoria)
 {
-    unsigned long Rt;
+    unsigned long Rt,address;
     int i;
     address=Rn+Rm;
-    for(i=4;i>=0;i++)
+    if(address>>31==1)
+    {
+        address=address<<28;
+        address=address>>28;
+        IOAccess(address,Rn,Read);
+    }
+    for(i=4;i>=0;i++)//  ???????
     {
         Rt=*(memoria+(address+i));
 

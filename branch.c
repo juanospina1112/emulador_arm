@@ -123,10 +123,10 @@ void BL(unsigned long **PC, unsigned long numeroSaltos, unsigned long **LR)
 }
 void BX(unsigned long **PC, unsigned long posicionSiguiente)
 {
-	**PC=posicionSiguiente; //realiza el salto correspondiente
+	**PC=posicionSiguiente-1; //realiza el salto correspondiente
 }
 void BLX(unsigned long **PC, unsigned long posicionSiguiente, unsigned long **LR)
 {
 	**LR=**PC+2; //almacenamiento de posición de la instrucción seguida a BL
-	**PC=posicionSiguiente; //realiza el salto correspondiente
+	**PC=posicionSiguiente-1; //realiza el salto correspondiente
 }

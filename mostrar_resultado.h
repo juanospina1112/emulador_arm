@@ -3,4 +3,6 @@
 * \param unsigned long resultado
 * \return Función declarada tipo void pues solo imprime datos
 */
+
 void mostrar(unsigned long resultado);
+
