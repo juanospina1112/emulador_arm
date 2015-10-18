@@ -14,7 +14,7 @@ unsigned long LDR(unsigned long Rn,unsigned long Rm,uint8_t *memoria)
     {
        /* address=address<<28;
         address=address>>28;*/
-        IOAccess(address,Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
+        IOAccess(address,&Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
     }
     else
     {
@@ -36,7 +36,7 @@ unsigned long LDRB(unsigned long Rn,unsigned long Rm,uint8_t *memoria)
     {
        /* address=address<<28;
         address=address>>28;*/
-        IOAccess(address,Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
+        IOAccess(address,&Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
     }
     else
     {
@@ -56,7 +56,7 @@ unsigned long LDRH(unsigned long Rn,unsigned long Rm,uint8_t *memoria)
     {
        /* address=address<<28;
         address=address>>28;*/
-        IOAccess(address,Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
+        IOAccess(address,&Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
     }
     else
     {
@@ -80,7 +80,7 @@ unsigned long LDRSB(unsigned long Rn,unsigned long Rm,uint8_t *memoria)
     {
        /* address=address<<28;
         address=address>>28;*/
-        IOAccess(address,Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
+        IOAccess(address,&Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
     }
     else
     {
@@ -104,7 +104,7 @@ unsigned long LDRSH(unsigned long Rn,unsigned long Rm,uint8_t *memoria)
     {
        /* address=address<<28;
         address=address>>28;*/
-        IOAccess(address,Rn,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
+        IOAccess(address,&Rt,Read);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
     }
     else
     {
@@ -131,7 +131,7 @@ STR(unsigned long Rt,unsigned long Rn,unsigned long Rm,uint8_t *memoria)
     {
        /* address=address<<28;
         address=address>>28;*/
-        IOAccess(address,Rt,Write);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
+        IOAccess(address,&Rt,Write);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
     }
     else
     {
@@ -168,7 +168,7 @@ STRH(unsigned long Rt,unsigned long Rn,unsigned long Rm,uint8_t *memoria)
     {
        /* address=address<<28;
         address=address>>28;*/
-        IOAccess(address,Rt,Write);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
+        IOAccess(address,&Rt,Write);  //eliminar el comentario anterior si funciona. el profesor nos ahorra trabajo
     }
     else
     {

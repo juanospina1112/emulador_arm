@@ -9,7 +9,7 @@
 #include "instrucciones_desplazamiento.h"
 #include <math.h>
 
-void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned long *bandera,unsigned long *PC,unsigned long*LR,uint8_t*memoria)
+void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned long *bandera,unsigned long *PC,unsigned long*LR,uint8_t*memoria,unsigned long *codificacion)
 {
     int auxban;
     unsigned long aux1,aux2,des;
@@ -876,12 +876,12 @@ if(strcmp(instruction.mnemonic,"STRB")==0)
 {
      if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
      {
-         r[instruction.op1_value]=STRB(r[instruction.op2_value],r[instruction.op3_value],memoria);
+         STRB(r[instruction.op1_value],r[instruction.op2_value],r[instruction.op3_value],memoria);
      }
      if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
      {
 
-         r[instruction.op1_value]=STRB(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+         STRB(r[instruction.op1_value],r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
      }
 
 }
@@ -889,12 +889,12 @@ if(strcmp(instruction.mnemonic,"STRH")==0)
 {
   if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
      {
-         r[instruction.op1_value]=STRH(r[instruction.op2_value],r[instruction.op3_value],memoria);
+         STRH(r[instruction.op1_value],r[instruction.op2_value],r[instruction.op3_value],memoria);
      }
       if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
      {
          instruction.op3_value=instruction.op3_value<<1;
-         r[instruction.op1_value]=STR(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+         STR(r[instruction.op1_value],r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
      }
 }
 
