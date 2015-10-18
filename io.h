@@ -26,12 +26,42 @@ typedef struct{
 	uint8_t Pins;
 	uint8_t Interrupts;
 }port_t;
-
+/**
+* \brief Funcion para modificar el modula de entrada y salida
+* \param uint8_t direccion de memoria
+* \param uint8_t registro
+* \param uint8_t leer o escribir en la memoria
+* \return void
+*/
 void IOAccess(uint8_t address, uint8_t* data, uint8_t r_w);
+/**
+* \brief Funcion cambia el estado fisico de los pines del puerto A
+* \param uint8_t pin a cambiar
+* \param uint8_t alto o bajo
+* \return void
+*/
 void changePinPortA(uint8_t pin, uint8_t value);
+/**
+* \brief Funcion cambia el estado fisico de los pines del puerto B
+* \param uint8_t pin a cambiar
+* \param uint8_t alto o bajo
+* \return void
+*/
 void changePinPortB(uint8_t pin, uint8_t value);
+/**
+* \brief Funcion que inicializa la funcion IO
+* \return void
+*/
 void initIO(void);
+/**
+* \brief Funcion que muestra los pines y el estado del modulo
+* \return void
+*/
 void showPorts(void);
+/**
+* \brief Funcion que complementa la funcion show
+* \return void
+*/
 void showFrame(int x,int y,int w,int h);
 
 #endif /*_IO_H_*/
