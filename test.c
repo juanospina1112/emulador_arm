@@ -13,9 +13,9 @@ extern port_t PORTB;
 char** instructions;
 int main()
 {
-    unsigned long r[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    unsigned long r[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0},codificacion;
     uint8_t memoria[256],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1},data;
-    int i, j, h, num_instructions,interrupcion=0;
+    int i, j, h, num_instructions,interrupcion=0,itc=0;
     keypad(stdscr, TRUE);
 
     for(i=0; i<256; i++)
@@ -65,8 +65,8 @@ int main()
 	{
 
 
-        interfaz(r);
 
+ interfaz(r);
 
 	    /*************** rutinas de salida  y entrada***/
         if(k==0)// si se quiere en forma directa o paso a paso
@@ -74,7 +74,45 @@ int main()
             pas_dire=getch();
             k=1;
         }
+                   /****************** verificacion de interrupcion***/
 
+   for(i=0; i<16; i++) //for para verificar
+{					//por lo menos una interrupcion
+	if(irq[i]==1)
+    {
+		interrupcion=1;
+        break;
+    }
+}
+if(interrupcion!=0) //entra si hay interrupcion
+{
+	if(itc==1)  //entra cuando hay interrupcion y se ha realizado
+	{			//el primer push verificando asi, el fin de la interrupcion
+		if(r[15]==0xffffffff)
+        {
+            POPINT(codinter,r,memoria);
+            interrupcion=0;
+			itc==0;
+			irq[i]=0 ;  //comprobar q interrupcion +++++falta+++++
+        }
+	}
+	else
+	{
+		for(i=0; i<16; i++)
+        {
+            if(irq[i]==1)
+            {
+                PUSHINT(codinter,r,memoria);
+                r[14]=0xffffffff;
+                r[15]=i+1;
+				itc=1;
+				break;
+            }
+
+        }
+         interfaz(r);
+	}
+}
 
         // forma para que el usuario termine el programa
 
@@ -242,11 +280,13 @@ int main()
                             if((PORTB.Pins&1)==0)
                             {
                               changePinPortB(0,HIGH);
+                              c=getch();
 
                             }
                             else
                             {
                                 changePinPortB(0,LOW);
+                                c=getch();
 
                             }
 
@@ -353,6 +393,7 @@ int main()
 
 
 
+
 	if(r[15]==num_instructions+1)
 	{
 		c='s';
@@ -380,52 +421,22 @@ int main()
 	}
 
 
-    /****************** verificacion de interrupcion***/
 
-   for(i=0; i<16; i++) //for para verificar 
-{					//por lo menos una interrupcion
-	if(irq[i]==1)
-    {
-		interrupcion=1;
-        break;
-    }
-}
-if(interrupcion!=0) //entra si hay interrupcion
-{
-	if(itc==1)  //entra cuando hay interrupcion y se ha realizado
-	{			//el primer push verificando asi, el fin de la interrupcion
-		if(r[15]==0xffffffff)
-        {
-            POPINT(codinter,r,memoria);
-            interrupcion=0;
-			itc==0;
-			irq[i]=0   //comprobar q interrupcion +++++falta+++++
-        }
-	}
-	else
-	{
-		for(i=0; i<16; i++)
-        {
-            if(irq[i]==1)
-            {
-                PUSHINT(codinter,r,memoria);
-                r[14]=0xffffffff;
-                r[15]=i+1;
-				itc=1;
-				break;
-            }
-
-        }
-	}
-}
 
     /******************** decodificacion y ejecucion *************************/
 
     if((c=='p')||(c=='d'))
     {
         instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
-        decodeInstruction(instruction,&r,&r[16],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
-        r[15]=r[15]+1;// aumentar el pc
+        decodeInstruction(instruction,&r,&r[16],&r[15],&r[14],memoria,&codificacion); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
+        if(r[15]==0xffffffff)
+        {
+
+        }
+        else
+        {
+            r[15]=r[15]+1;// aumentar el pc
+        }
     }
 
     }
