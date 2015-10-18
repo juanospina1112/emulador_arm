@@ -13,7 +13,7 @@ int main()
 {
     unsigned long r[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     uint8_t memoria[256],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1},data;
-    int i, j, h, num_instructions,interrupcion=0;
+    int i, j, h, num_instructions,interrupcion=0, itc=0;
     keypad(stdscr, TRUE);
 
     for(i=0; i<256; i++)
@@ -176,37 +176,42 @@ int main()
 
     /****************** verificacion de interrupcion***/
 
-    for(i=0; i<16; i++)
+for(i=0; i<16; i++) //for para verificar 
+{					//por lo menos una interrupcion
+	if(irq[i]==1)
     {
-        if(irq[i]==1)
-        {
-             interrupcion=1;
-              break;
-        }
+		interrupcion=1;
+        break;
     }
-    if(interrupcion==1)
-    {
-        if(r[15]==0xffffffff)
+}
+if(interrupcion!=0) //entra si hay interrupcion
+{
+	if(itc==1)  //entra cuando hay interrupcion y se ha realizado
+	{			//el primer push verificando asi, el fin de la interrupcion
+		if(r[15]==0xffffffff)
         {
             POPINT(codinter,r,memoria);
             interrupcion=0;
+			itc==0;
+			irq[i]=0   //comprobar q interrupcion +++++falta+++++
         }
-    }
-    else
-    {
-        for(i=0; i<16; i++)
+	}
+	else
+	{
+		for(i=0; i<16; i++)
         {
             if(irq[i]==1)
             {
                 PUSHINT(codinter,r,memoria);
                 r[14]=0xffffffff;
                 r[15]=i+1;
-                break;
+				itc=1;
+				break;
             }
 
         }
-
-    }
+	}
+}
 
     /******************** decodificacion y ejecucion *************************/
 

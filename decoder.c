@@ -348,6 +348,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(28<<11)+(instruction.op1_value);
 			B(&PC,instruction.op1_value);
 		}
 	}
@@ -355,6 +356,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(instruction.op1_value);
 			BEQ(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -362,6 +364,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(1<<8)+(instruction.op1_value);
 			BNE(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -369,6 +372,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(2<<8)+(instruction.op1_value);
 			BCS(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -376,6 +380,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(3<<8)+(instruction.op1_value);
 			BCC(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -383,6 +388,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(4<<8)+(instruction.op1_value);
 			BMI(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -390,6 +396,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(5<<8)+(instruction.op1_value);
 			BPL(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -397,6 +404,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(6<<8)+(instruction.op1_value);
 			BVS(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -404,6 +412,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(2<<7)+(instruction.op1_value);
 			BVC(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -411,6 +420,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(8<<8)+(instruction.op1_value);
 			BHI(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -418,6 +428,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(9<<8)+(instruction.op1_value);
 			BLS(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -425,6 +436,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(10<<8)+(instruction.op1_value);
 			BGE(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -432,6 +444,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(11<<8)+(instruction.op1_value);
 			BLT(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -439,6 +452,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(12<<8)+(instruction.op1_value);
 			BGT(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -446,6 +460,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(13<<11)+(13<<8)+(instruction.op1_value);
 			BLE(&PC,instruction.op1_value,&bandera);
 		}
 	}
@@ -453,6 +468,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='#')
 		{
+			*codificacion=(31<<11)+(2047&instruction.op1_value+(((1<<31)&instruction.op1_value)>>20));
 			BL(&PC,instruction.op1_value,&LR);
 		}
 	}
@@ -460,6 +476,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='R')
 		{
+			*codificacion=(142<<7)+(instruction.op1_value<<3);
 			BX(&PC,r[instruction.op1_value]);
 		}
 	}
@@ -467,6 +484,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if(instruction.op1_type=='R')
 		{
+			*codificacion=(143<<7)+(instruction.op1_value<<3);
 			BLX(&PC,instruction.op1_value,&LR);
 		}
 	}
