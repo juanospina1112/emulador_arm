@@ -1,4 +1,3 @@
-
 #include "io.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,10 +10,12 @@ extern uint8_t irq[16];
 extern port_t PORTA;
 extern port_t PORTB;
 char** instructions;
+int interrupcion=0,itc=0;
+uint8_t memoria[256],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1},data;
 int main()
 {
     unsigned long r[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0},codificacion;
-    uint8_t memoria[256],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1},data;
+
     int i, j, h, num_instructions,interrupcion=0,itc=0;
     keypad(stdscr, TRUE);
 
@@ -66,7 +67,7 @@ int main()
 
 
 
- interfaz(r);
+    interfaz(r);
 
 	    /*************** rutinas de salida  y entrada***/
         if(k==0)// si se quiere en forma directa o paso a paso
@@ -74,46 +75,8 @@ int main()
             pas_dire=getch();
             k=1;
         }
-                   /****************** verificacion de interrupcion***/
 
-   for(i=0; i<16; i++) //for para verificar
-{					//por lo menos una interrupcion
-	if(irq[i]==1)
-    {
-		interrupcion=1;
-        break;
-    }
-}
-if(interrupcion!=0) //entra si hay interrupcion
-{
-	if(itc==1)  //entra cuando hay interrupcion y se ha realizado
-	{			//el primer push verificando asi, el fin de la interrupcion
-		if(r[15]==0xffffffff)
-        {
-            POPINT(codinter,r,memoria);
-            interrupcion=0;
-			itc==0;
-			irq[i]=0 ;  //comprobar q interrupcion +++++falta+++++
-        }
-	}
-	else
-	{
-		for(i=0; i<16; i++)
-        {
-            if(irq[i]==1)
-            {
-                PUSHINT(codinter,r,memoria);
-                r[14]=0xffffffff;
-                r[15]=i+1;
-				itc=1;
-				break;
-            }
-
-        }
-         interfaz(r);
-	}
-}
-
+     verinte(r,itc);
         // forma para que el usuario termine el programa
 
         if(pas_dire!='d')
@@ -431,6 +394,7 @@ if(interrupcion!=0) //entra si hay interrupcion
         decodeInstruction(instruction,&r,&r[16],&r[15],&r[14],memoria,&codificacion); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
         if(r[15]==0xffffffff)
         {
+            verinte(r,itc);
 
         }
         else
@@ -441,7 +405,7 @@ if(interrupcion!=0) //entra si hay interrupcion
 
     }
 }
-interfaz(unsigned long r[16])
+interfaz(unsigned long r[17])
 {
 int c,i;
 	mostrar_registros(r);
@@ -735,4 +699,47 @@ int c,i;
 	refresh();	/* Imprime en la pantalla
 					Sin esto el printw no es mostrado */
 
+}
+verinte(unsigned long r[17])
+{ int i;
+     /****************** verificacion de interrupcion***/
+
+   for(i=0; i<16; i++) //for para verificar
+{					//por lo menos una interrupcion
+	if(irq[i]==1)
+    {
+		interrupcion=1;
+        break;
+    }
+}
+if(interrupcion!=0) //entra si hay interrupcion
+{
+	if(itc==1)  //entra cuando hay interrupcion y se ha realizado
+	{			//el primer push verificando asi, el fin de la interrupcion
+		if(r[15]==0xffffffff)
+        {
+            POPINT(codinter,r,memoria);
+            interrupcion=0;
+			itc==0;
+			irq[i]=0 ;
+			  //comprobar q interrupcion +++++falta+++++
+        }
+	}
+	else
+	{
+		for(i=0; i<16; i++)
+        {
+            if(irq[i]==1)
+            {
+                PUSHINT(codinter,r,memoria);
+                r[14]=0xffffffff;
+                r[15]=i+1;
+				itc=1;
+				break;
+            }
+
+        }
+         interfaz(r);
+	}
+}
 }
