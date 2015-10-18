@@ -8,12 +8,14 @@
 #include "decoder.h"
 #include <stdint.h>
 extern uint8_t irq[16];
+extern port_t PORTA;
+extern port_t PORTB;
 char** instructions;
 int main()
 {
     unsigned long r[17]={0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     uint8_t memoria[256],codinter[17]={1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1},data;
-    int i, j, h, num_instructions,interrupcion=0, itc=0;
+    int i, j, h, num_instructions,interrupcion=0;
     keypad(stdscr, TRUE);
 
     for(i=0; i<256; i++)
@@ -36,7 +38,7 @@ int main()
 	instruction_t instruction;
 	/************ lee el programa a ejecutar *****/
 			//------- No modificar ------//
-	num_instructions = readFile("code.txt", &read);
+	num_instructions = readFile("interrupciones.txt", &read);
 	if(num_instructions==-1)
 		return 0;
 	if(read.array==NULL)
@@ -62,7 +64,7 @@ int main()
     while(1)
 	{
 
-        instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
+
         interfaz(r);
 
 
@@ -124,22 +126,226 @@ int main()
                         exit(0);
                         break;
                     case 'a':
-                        if(c==KEY_F(1))
+
+                        c=getch();
+                        if(c=='0')
                         {
-                            if(h=0)
+                            if((PORTA.Pins&1)==0)
                             {
                               changePinPortA(0,HIGH);
-                              h=1;
+
                             }
                             else
                             {
                                 changePinPortA(0,LOW);
-                                h=0;
+
+                            }
+
+                        }
+                          if(c=='1')
+                        {
+                            if((PORTA.Pins&1<<1)==0)
+                            {
+                              changePinPortA(1,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortA(1,LOW);
+
+                            }
+
+                        }  if(c=='2')
+                        {
+                            if((PORTA.Pins&1<<2)==0)
+                            {
+                              changePinPortA(2,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortA(2,LOW);
+
+                            }
+
+                        }  if(c=='3')
+                        {
+                            if((PORTA.Pins&1<<3)==0)
+                            {
+                              changePinPortA(3,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortA(3,LOW);
+
+                            }
+
+                        }  if(c=='4')
+                        {
+                            if((PORTA.Pins&1<<4)==0)
+                            {
+                              changePinPortA(4,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortA(4,LOW);
+
+                            }
+
+                        }  if(c=='5')
+                        {
+                            if((PORTA.Pins&1<<5)==0)
+                            {
+                              changePinPortA(5,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortA(5,LOW);
+
+                            }
+
+                        }  if(c=='6')
+                        {
+                            if((PORTA.Pins&1<<6)==0)
+                            {
+                              changePinPortA(6,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortA(6,LOW);
+
+                            }
+
+                        }  if(c=='7')
+                        {
+                            if((PORTA.Pins&1<<7)==0)
+                            {
+                              changePinPortA(7,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortA(7,LOW);
+
                             }
 
                         }
                         break;
                     case 'b':
+                        c=getch();
+                         if(c=='0')
+                        {
+                            if((PORTB.Pins&1)==0)
+                            {
+                              changePinPortB(0,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(0,LOW);
+
+                            }
+
+                        }
+                          if(c=='1')
+                        {
+                            if((PORTB.Pins&1<<1)==0)
+                            {
+                              changePinPortB(1,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(1,LOW);
+
+                            }
+
+                        }  if(c=='2')
+                        {
+                            if((PORTB.Pins&1<<2)==0)
+                            {
+                              changePinPortB(2,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(2,LOW);
+
+                            }
+
+                        }  if(c=='3')
+                        {
+                            if((PORTB.Pins&1<<3)==0)
+                            {
+                              changePinPortB(3,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(3,LOW);
+
+                            }
+
+                        }  if(c=='4')
+                        {
+                            if((PORTB.Pins&1<<4)==0)
+                            {
+                              changePinPortB(4,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(4,LOW);
+
+                            }
+
+                        }  if(c=='5')
+                        {
+                            if((PORTB.Pins&1<<5)==0)
+                            {
+                              changePinPortB(5,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(5,LOW);
+
+                            }
+
+                        }  if(c=='6')
+                        {
+                            if((PORTB.Pins&1<<6)==0)
+                            {
+                              changePinPortB(6,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(6,LOW);
+
+                            }
+
+                        }  if(c=='7')
+                        {
+                            if((PORTB.Pins&1<<7)==0)
+                            {
+                              changePinPortB(7,HIGH);
+
+                            }
+                            else
+                            {
+                                changePinPortB(7,LOW);
+
+                            }
+
+
+
+                        }
+                        break;
 
                 }
 
@@ -176,7 +382,7 @@ int main()
 
     /****************** verificacion de interrupcion***/
 
-for(i=0; i<16; i++) //for para verificar 
+   for(i=0; i<16; i++) //for para verificar 
 {					//por lo menos una interrupcion
 	if(irq[i]==1)
     {
@@ -217,6 +423,7 @@ if(interrupcion!=0) //entra si hay interrupcion
 
     if((c=='p')||(c=='d'))
     {
+        instruction = getInstruction(instructions[r[15]]); // Instrucción en la posición del PC
         decodeInstruction(instruction,&r,&r[16],&r[15],&r[14],memoria); // decodificacion del memonico y ejecucion, se le debe pasar las banderas y los registros
         r[15]=r[15]+1;// aumentar el pc
     }
@@ -489,7 +696,7 @@ int c,i;
 	move(10, 60);
 	printw("%s",instructions[r[15]]);
 	move(34, 3);
-	printw("s:: salir");
+	printw("s::salir");
 	move(34, 15);
 	printw("r::reset");
 	move(34, 25);
@@ -498,6 +705,14 @@ int c,i;
 	printw("d::directo");
 	move(34, 58);
 	printw("m::mostrar memoria/pro");
+	move(36, 3);
+	printw("t::mostrar puertos");
+	move(36,42);
+	printw("NOTA:para act/desact un pin, primero escriba");
+    move(37,42);
+    printw("el puerto(a o b) y luego el numero del pin");
+    move(38,42);
+    printw("(para cada puerto hay 8 pins)");
 	move(14,60);
 	printw("PC=%d",2*r[15]);
 	move(16,60);
