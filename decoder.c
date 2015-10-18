@@ -770,7 +770,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if((instruction.op2_type=='R'))
 		{
-		   *codificacion=(11<<12)+(10<<8)+(1<<6))+(instruction.op2_value<<3)+(instruction.op1_value);
+		   *codificacion=(11<<12)+(10<<8)+(1<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
 			r[instruction.op1_value]=REV16(r[instruction.op2_value]);
 
 		}
@@ -780,7 +780,7 @@ void decodeInstruction(instruction_t instruction,unsigned long *r[],unsigned lon
 	{
 		if((instruction.op2_type=='R'))
 		{
-		    *codificacion=(11<<12)+(10<<8)+(3<<6))+(instruction.op2_value<<3)+(instruction.op1_value);
+		    *codificacion=(11<<12)+(10<<8)+(3<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
 			r[instruction.op1_value]=REVSH(r[instruction.op2_value]);
 
 		}
@@ -878,19 +878,19 @@ if(strcmp(instruction.mnemonic,"STR")==0)
      if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
      {
          *codificacion=(5<<12)+(instruction.op3_value<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
-         r[instruction.op1_value]=STR(r[instruction.op2_value],r[instruction.op3_value],memoria);
+         STR(r[instruction.op1_value],r[instruction.op2_value],r[instruction.op3_value],memoria);
      }
       if((instruction.op2_type=='SP')&&(instruction.op3_type=='#'))
      {
          *codificacion=(9<<11)+(instruction.op1_value<<8)+(instruction.op3_value);
          instruction.op3_value=instruction.op3_value<<2;
-         r[instruction.op1_value]=STR(r[13],(uint32_t)(instruction.op3_value),memoria);
+         STR(r[instruction.op1_value],r[13],(uint32_t)(instruction.op3_value),memoria);
      }
       if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
      {
          *codificacion=(3<<13)+(instruction.op3_value<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
          instruction.op3_value=instruction.op3_value<<2;
-         r[instruction.op1_value]=STR(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+         STR(r[instruction.op1_value],r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
      }
 }
 if(strcmp(instruction.mnemonic,"STRB")==0)
@@ -898,12 +898,12 @@ if(strcmp(instruction.mnemonic,"STRB")==0)
      if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
      {
          *codificacion=(5<<12)+(2<<9)+(instruction.op3_value<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
-         r[instruction.op1_value]=STRB(r[instruction.op2_value],r[instruction.op3_value],memoria);
+         STRB(r[instruction.op1_value],r[instruction.op2_value],r[instruction.op3_value],memoria);
      }
      if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
      {
          *codificacion=(14<<11)+(instruction.op3_value<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
-         r[instruction.op1_value]=STRB(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+         STRB(r[instruction.op1_value],r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
      }
 
 }
@@ -912,13 +912,13 @@ if(strcmp(instruction.mnemonic,"STRH")==0)
   if((instruction.op2_type=='R')&&(instruction.op3_type=='R'))
      {
          *codificacion=(5<<12)+(1<<9)+(instruction.op3_value<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
-         r[instruction.op1_value]=STRH(r[instruction.op2_value],r[instruction.op3_value],memoria);
+         STRH(r[instruction.op1_value],r[instruction.op2_value],r[instruction.op3_value],memoria);
      }
       if((instruction.op2_type=='R')&&(instruction.op3_type=='#'))
      {
          *codificacion=(1<<15)+(instruction.op3_value<<6)+(instruction.op2_value<<3)+(instruction.op1_value);
          instruction.op3_value=instruction.op3_value<<1;
-         r[instruction.op1_value]=STR(r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
+         STR(r[instruction.op1_value],r[instruction.op2_value],(uint32_t)(instruction.op3_value),memoria);
      }
 }
 
@@ -1038,4 +1038,3 @@ int countLines(FILE* fp)
 
 	return lines;
 }
-
