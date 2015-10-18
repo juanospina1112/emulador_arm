@@ -31,11 +31,11 @@ void changePinPortB(uint8_t pin, uint8_t value)
 	if( ( (PORTB.Pins & (1<<pin)) != (value<<pin) ) &&
 		( PORTB.Interrupts & (1<<pin) ) )
 		irq[pin+8] = 1;
-
 	PORTB.Pins = (PORTB.Pins & ~(1<<pin)) | value<<pin;
 }
 
-void IOAccess(uint8_t address, uint8_t* data, uint8_t r_w)
+
+void IOAccess(uint8_t address, uint8_t *data, uint8_t r_w)
 {
 	if(r_w){
 		switch(address){
@@ -74,17 +74,18 @@ void IOAccess(uint8_t address, uint8_t* data, uint8_t r_w)
 				break;
 			case 1:
 				PORTA.PORT = *data;
-				//PORTA.Pins = (PORTA&(~PORTA.DDR))|(PORTA.PORT&PORTA.DDR);
+				PORTA.Pins = (PORTA.Pins&(~PORTA.DDR))|(PORTA.PORT&PORTA.DDR);
 				break;
 			case 3:
 				PORTA.Interrupts = *data&(~PORTA.DDR);
 				break;
 			case 10:
-				PORTB.DDR = *data;
+
+				PORTB.DDR=*data ;
 				break;
 			case 11:
 				PORTB.PORT = *data;
-				PORTB.Pins = (PORTB&(~PORTB.DDR))|(PORTB.PORT&PORTB.DDR);
+				PORTB.Pins = (PORTB.Pins&(~PORTB.DDR))|(PORTB.PORT&PORTB.DDR);
 				break;
 			case 13:
 				PORTB.Interrupts = *data&(~PORTB.DDR);
